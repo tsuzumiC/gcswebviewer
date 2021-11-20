@@ -1,0 +1,2099 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+***** BEGIN LICENSE BLOCK *****
+Copyright (c) 1998-2021 by Richard A. Wilkes. All rights reserved.
+
+This Source Code Form is subject to the terms of the Mozilla Public
+License, version 2.0. If a copy of the MPL was not distributed with
+this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+This Source Code Form is "Incompatible With Secondary Licenses", as
+defined by the Mozilla Public License, version 2.0.
+***** END LICENSE BLOCK *****
+-->
+<head>
+    <meta charset="utf-8" />
+    <title>Alicia Whethnook</title>
+    <script src="https://kit.fontawesome.com/b74c5174c2.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wghtUnidentified key: '400';700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: Roboto, sans-serif;
+            font-size: small;
+            font-weight: normal;
+            padding: 0;
+            margin: .25in;
+            margin-bottom: calc(.25in - 1em);
+        }
+
+        #sheet {
+            display: grid;
+            grid-template:
+                "personal personal"
+                "stats stats"
+                "melee melee"
+"ranged ranged"
+"reactions reactions"
+"advantages skills"
+"spells spells"
+"equipment equipment"
+"other_equipment other_equipment"
+"notes notes"
+"conditional_modifiers conditional_modifiers"
+ ;
+            grid-gap: .05in;
+        }
+
+        #footer {
+            text-align: center;
+            font-size: 80%;
+        }
+
+        .fieldblock {
+            display: grid;
+            grid-template-columns: 0fr 1fr;
+            align-items: end;
+            padding-bottom: .15em;
+        }
+
+        .fieldblock hr {
+            grid-column: 1 / span 2;
+            width: 100%;
+            border: none;
+            background-color: black;
+            height: 1px;
+            margin: 0;
+            margin-top: .2em;
+            margin-bottom: .1em;
+        }
+
+        .fieldblock3 {
+            display: grid;
+            grid-template-columns: 0fr 1fr 0fr;
+            align-items: end;
+            padding-bottom: .15em;
+        }
+
+        .fieldblock3 hr {
+            grid-column: 1 / span 3;
+            width: 100%;
+            border: none;
+            background-color: black;
+            height: 1px;
+            margin: 0;
+            margin-top: .2em;
+            margin-bottom: .1em;
+        }
+
+        .fieldblock5 {
+            display: grid;
+            grid-template-columns: 0fr 1fr 0fr 1fr 0fr;
+            align-items: end;
+            padding-bottom: .15em;
+        }
+
+        #personal {
+            grid-area: personal;
+            display: grid;
+            grid-template:
+                "portrait identity miscellaneous points"
+                "portrait description description points";
+            grid-template-columns: 0fr 1fr 1fr 0fr;
+            grid-gap: .05in;
+        }
+
+        #portrait {
+            grid-area: portrait;
+            display: grid;
+            grid-template:
+                "header"
+                "portrait";
+            grid-template-rows: 0fr auto;
+            grid-template-columns: auto;
+            border: 1px solid black;
+        }
+
+        .portrait {
+            font-size: medium;
+            width: 6.75em;
+            height: 9em;
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAADACAYAAADryOpPAABaDUlEQVR4Xu3d5ZJry5FAYT/IoMdjHmZmZmZmZmZmZmZm20MeerSe+HbEOpE3rVaD+vQ91/aPDEkbaldlrsrMAkkv+qqv+qqrLV/91V99UvZ1jy1f+ZVf+WDyFV/xFbeSL//yL7+XfNmXfdmt5Eu/9EtvlC/5ki+5Vr74i7/4rHzRF33RG8gXfuEXvoF8wRd8wa3k8z//858jL9pGIhucLfv6x5INwSUyITl17LEAug1EG5otG5r7AHRbkG4EaMNySvY9jy0bhktkA3NKNhy3lQ3KKdmwnJINzJYNzSUA3RWi5wC0QTkn26jPh2wYLpENzSnZgNwkG5brZAOzZQOzZUNzE0DXgRQgN0H0IAA9KyBtEC6VDc1jAHQpRBuamwACyCmAbgLnLEAbjLvINupjy4bgvrKB2bIBuY1sUK6TDcyWDc2WDc5NED0YQBuG+8g26PMhG4ZLZcPztAG6FKINzZsBuodsCC6RDc99AboLRBuYLRua2wJ0V4huguk5AH3N13zNGwBxX9kGfWzZEFwqG6D7QrRBuU42MFs2NFs2NPcBCCB3BijZQNxHtlEfWzYEl8oG6GlCtIE5JRuahwboHDiPAhDZRr1J7nPPdbIBeAh5LIBuA9GG5lKAroPoJpBOAvSQMG3DnpK7Xn9b2QA8hLwQADoH0YbmNgCdg+ipA0S2Ybfs6297321kA3CpPCsA3QTRBucmiDYwWzY4G6KnChDZhiX7mlNy6p597DayQbhELoFog3KdbFhOyYbmEoBugmhDc2uAHhKiSyR45ue7yIbgErkkF9qgXCcbllOyoXlmAXqWQJqyITknG4JL5b4APSREG5otG5ybADoH0YbmXgA9qyCRDcyW64y/wbiLvFABOgfRBudNAiCA9DrFMYZmNArV0M/6rM+6+ozP+IyrT//0T7/65E/+5EM+9VM/9erTPu3TjuOf93mfd1x7G8CethfawGzZwGzZ0FwC0DmI7gzQswjRlOrIsJ/zOZ9z9Umf9ElXH/VRH3X14R/+4Vcf9mEfdvWBH/iBV+/zPu9z9V7v9V5X7/me7/lEfH7f933fqw/90A897vnsz/7sQzmMueF5DIAuhWhDcxuAzkG0wZnyKABdcu9N8nVf93VX3/iN33i8ZyDG/8RP/MSrj/iIj7j6oA/6oAMM0Lz3e7/3Acq7v/u7H/Ju7/ZuV+/6ru96yLu8y7scr4655gM+4AOuPvIjP/Io5zM/8zMPGBnmFEQbkJtkg3KdbGC2bGi2bHBesADt++9TxikBzrd8y7ccrwzM03zCJ3zCYXieBATv937v9wQenuY93uM9ngC0IQok4rjrP/iDP/jwXsp6//d//8M7BdJ9vdAG5TrZwGzZwGzZ4DwzAN0WgH3PKdn33CTu+eZv/uar7/me77n6tm/7tsOQH/dxH3f1IR/yIUeI+tiP/djjlecRriZE1wEUNFucA15luN79niV3YgxA3BWg20K0gdmygdmywbkEoHMQ3Qug2wCwrz0l+55z8g3f8A1XP/RDP3T1Az/wA1ff8R3fcRiCxxGiCHA+5mM+5on3ARCQvCflPgmgQMHzvPM7v/MTKZwV0sqTvCcg8ln5EvFAuqtsYE7JhmbLhuZSgM5BtMF5UID28bvKhmXLN33TN1396I/+6AEOkHgeI6c8AzhAIu8BkuNCjhDE0MRnHiUJjCACzju90zs9B6Rgyvsk3UdAamTHaBuSc7JhOSUbmC0bmtsAdBNEG5xz8FwM0EPJBmYKYH7wB3/wyHcMxT/3cz/3SJSBwoC8ScAwJojySj4LOUDimVwDgDkK83l6oQnRhClvFHyV0XG5l7ox/IbllGxYTskGZsuG5rYAnYNow3MTRM8EQGSDQyTI3/u933uMsoQLMAhbcp3yGqAEkFeg8DiO80rgcV95UUbPk5QXBdEEyPvgmSENPIHYe+J5n/Ipn3Irb7RhuU42NFs2OG8GaMDznd/5nQc8H//xH/8EFB4GFA3LgeQcgEjvnXeuXCio3FOOcy6M9Z7M5DtwlL0hct5z5WKMsaF5TIBugmiD84IHKAGPVyHLK3gyFoCA4DWAvAbXHLYXYhybo7IAKr/JEzUim57H+1e/+tVP5oeCqFBGur/nBRXQKX6D80IF6DqILgboa7/2a5/zeqkASFleDZcZv15eqAJJIYzkhZIZVrx3D3iUpQzHAiSISBAFEHnHd3zHQ4K1ZwaNYzPJ7pzjwum5vGjDcko2MFs2NC8YgCY4DwVPYj1L5Uzi5XGA0fs5OVjYCKpkGtVn9zUhqCzHC2XT8O6bw3kwvepVrzo+V3YeLoC8nsqTnAOtEeMpiDYsp2QDs2VDs2WD88wCNGVfe1dRWUPjRlENw32eRjwFUO8LS4Wczu9QN0NSYaicKI8kjIEoGOezel4QzRFb16g/b3ofiDYwWzYwt4HnmQHonOzrbyNf//VffyjN+pMZZsmy4fqcz8lYM5z0eUuTf+UwGTVvBEivlbU9EXFvXohnmp6HJ5tABZHrgqi66AA6xYZoA7NlA7NlQ7Nlg/NGC5DRluUJFTUUBg4RxuQSDccZqoR6gpQHmQDNMDU9TblUE48gmtDM/ClP9g7v8A6HJwrYyiokzvyrKQHeSDnV0XPNYd0FoJsg2sBs2eDcBNBdIbozQBuU62Tfd054Hutb1rlMFhoGB08Atd6VkcqLAmdKAOURZm4SfMTk30d/9Ec/Sa4DrtCnjIAFBIhAkedRvtemEKqT55SEk2BTJi9K8Q8F0E0QbXBeMADdBSRLFAAy92ODF8MCJw8BIEZmpGk0xsijTA+UgSdEBAiBwet4hi0bzVK7r/yn5Lo5Jfc3Iuv5PaMEv4VX56b3I3ku5YCWcZ9PgM5BtKF5MIA2HLeVXc4USxXg+fZv//ZjZduMM3BA5JVxA6jezUjlL00UBoBzGTMjZ7jCGHFeuYA111RiTfJapJzJPbwQgJzvGcFaTlWu5vPMo3p2nrCk+jaygdmyoXmTAcg53seMs/ClUYzJM9jfswGa+U/LE8T79u0ElJyp5DvwZhhzzHmGtJ+IpytXKY9pRBWIDeuBpA6z/EaJAaROjpeYTw+oHNfY9XgbL7SB2bKhuRSgcxA9LwAluzyr7LyPBNrcD0OW/7QVlSFaEGVEBmA81wSRa3msoAms+ZmBg6ck2PHCic1iri2Bdj4vVJh0vOWN7ndPnih4Aqikv+flkSpXWxlyA7NlA7NlQ/NMArRhuI/s8r7ru77r8EAaqjKGuQwKDq+texFeiJEKKxmI8CLlMo3Y8gYZ2WsQZEzlud6Ges8HIhjyVAzfqKwQ1+y0V2AFTIm55ygjrxhEJdGFNF7MMSF0A7NlA7NlQ3NbgM5BtMG5DqLnDSBe5/u///sPL2RoS4AAHEYNoCAp0W0uJgM57j6KtFLfcP8URKRwljdyzuo+Q4GwUMbIeQ7vS5bzQupRkq2Mwlz5j2MNBLx3b0CSRmjq1Ab+c7Kh2bLBeaYA2iBcIpUp77FVw5qXqX5yCqCG8OVBjY4ovtGaxLvyTUAWQq4LaYUVhvQ+L6QOnuv+DN11QAqCcqHAagjvGq8AIjMUB1ghMi/kPfBBsKF5CIBugmiDcxNAdwph2/gPIZX9fd/3fcfIi3LMPPc9LQZkfIovnBXCCAPquYBotCbxDkqvPhdGgs8rMJRV4pshfeaF5GAALFxOLxQcM5lujqeRWNf5nBcqP/P8hvfTCynLtS26XicbmC0bmksBui1Ejw5QYm+zIbwKMRyj9z0uiqd0SWbKnxBQOmPo2SBznSScR5NXKVdZrnFPoCljJrrlO4zqOhC7z7XONfzPyzh2akjvOucLfcHmWPlcC8OVSQLR813DaBucFyxA2+APJco28yz/sbdZzyMAAgJj5/59JnmS8hvGYazgIABSpr3TQJKcS8obsTFQ4bEQw6A8Bxh4jcIhb1TeUtINhiBWJg8CIBA4r5yu51mA4lheqAGBY+ApB2pUp0xLOGDY8FwK0YbmQQHKqI8BT2LOh7FVUvgi8gAGouTmWIQTxiwRDSDXAcixQpv5FN/a+Nmf/dmrn/7pn7764R/+4cMbKZthZ1h0fXkLyRsAyjMb0TlXCCssKSe4AFB+BIxyq/KbPBGAtSFgZxLdEol7XMcbb3AuBegcRBuaewFEHhMg3kEOJGnV6+r1hZWMxdiOZ/SS4/IixskzaYzN9z/3cz939Yu/+IsHSCCSFzFKQ2zhCUju6Vklxl6VDaCS6ZZDGB50jbqIc3mo8qAS5RZTA73nudb55oICiDdTto7EsBueNwM0pFylnIPB9HyKLlFlEL2WsYWxcqMS6maeHWNoZZmU/Pmf//mrX/7lX776lV/5lauf+ZmfefJ1INMEAQCiICzXabTVeeCCM48BBO/Ln8qJ1LNz3hdewVGO1LVeew5xzfRC7lMvC8obnqcF0DmINjhnAXpM4Rm+9Vu/9QBDjyNz9FMo8JlCWzUvf2H4CQCIwAYU3ufXfu3Xrn7jN37j6ld/9VcPoEBkq4hJu0ZgypqeIYh4CNc0hVCIa8hfclx4CyjGdyzv6bPcBkTeO1bnCKByoeaVHHPddV5oA7NlQ/NGCZAVd57BKy+ip/dVHaDUoxmSgUtcGbT5lEJZYa0El/fkecDzm7/5m1e/9Vu/dbx37Md+7MeOZ5oqKIcqLAXT9CZ5OuWXswCmkBZsrm3UVk41IWrWOi9UiCt/aiQGIEC5V+fgMZ9VgCZEjw6QIfYv/MIvHCMwBuJZAOQ1Q1ByCegcfVEsQ2dgUu9nIKMu4Qs04Pm93/u9Q373d3/38EoSdxOGnjXDT3mNsgJgHgMLIzN2nqMJzbxZozP3BZB7tQNEru2ZjpUDFeqEMGV3bz/kcBeINjSXAnQdRM+rBxK6AKTiAOBVAsh7x+rlJaBbCiUZmNJd714jMcD8/u///tUf/uEfXv3RH/3R8erzj//4jx+GYSAGLxcqDDlWHfImAc1D9BWfkt+8kuvyYjPE9blRGYjqHIWvPFBlB696nFri2NA8HwA9rx5I8mykZO4nozVcz3h5hrwDIyY+E0aol5dbuJ7r//Vf//UDnD/+4z+++tM//dOrP/mTPzk+806UCdh+SKr9156d5Omqh1fegZFLjJtIBAEwCoXVr3p7VUbJcsP+ORdElN18lHu069SeoQ3NmxxAPMRP/dRPHYajYMCUTLclI0DKR1JqPTvDlsTmJcppvvu7v/uA5s/+7M+u/uIv/uKAiBcS1nghXtAaHKVTUutggWTE5z2Q8hggEWZsri+clSQXztRJXdQxr6Y+M+8p18mTzVFYI7HAk/ep35sBGsL7SKIZrJ5GUQBq1rkw1fwKmflF3qnwURgLOCB6zp//+Z9f/eVf/uUBUQDxQj/yIz9yzA/ZCSAnk3xTsh6vDhm/EaD6lQfxFHmLQllA5Y0KX9oyc7qunxAR9wdnuVK66ZsclwJ0DqINzcUAGa3sYw8hyjW0NsknfBSWGKrhfGtGKT7vw4B9bhSUVI7zXSdEgYgXApJw9ju/8zvHiOwnfuInjrkoi7lmxdWLcQDE6J7X2lzTC+UyJbykBdWgCCLP14aSfJ/zOC1dNAorKVdu3q3Ook19z/42AJ2DaEPz1ACizGSfu1TsAfrt3/7tY25GY0tgGYjBTAZOLxRIoKkXl1x73+cZyvJOQSRclg8ByDxRHghAeSL7sU1ollMVQiX3/ehmSy49J+9THpNnAUqesbDreDPOiWMAKrzlhcr93C+cei593QaiDc4bDUDChB9MMBpiROWDBTzlQe0sbN2o8JZ3odiWDkCT8jN2xvI+6JRnbSyAwCsPA4/69Asg1tIYS3lCFIM67h5TAb/0S790TAO4Tp1LtEuGp2fJu+R9qjc4XvGKVxzl58W6tsTcOQDmgbTfBChjXgLQOYg2NLcBKIieA9CE52lAxFhyEcZgQB6ihVKvPJC1MSOyZogd99n7vE3g1NuDaOdMhT892NQB7yd8WocTugDifV9o9IzyG8Y3s/1P//RPRwg0sjMZKeGuTtW1JLlQRpqBJjN8vexlLzsgAtMrX/nKQ0A0k2pgqbv6gJVe5gb8Dc2bDECG8DwQLyAH0bNa42o4T1m8RrlQ8yGMBQaGIs0OM1YGSEquS0bByLvxICAAsuTZthKfgaIu7mNEIIKEco3mzGpbDqFQwKgnkBiTUZXtWdMTAchrs82B9fKXv/zqpS996fEKJK/lPjMvamqAbuijnxq2beUcRBua2wB0DqINzZ0BekiIDK+NhOQlADISK1wxgBFPyXReCGCUpjGuaw4liDLWTGK9d11hAJzKAydoeD/1kfsYEQLIsF6v75lCKgVJuMHWL9x7besI+KzrKY+X85wJEU/SBGH5Eo/DC4HIK3FsAgfkvKn6q08/7wceNlGHDc/zCtCG5mkAZLXcKKgchNIDiLG5a8qSUM95IT2wIbHcw3uhoZ7ayKheDCRGc03JrOdIhnkaDWcAAMmPhDHt9GyerolGRiPuAY76AhBUwrDOICyWH/FKhbTCWHD0GVB5oUDiiaq/6wrJylF/OlAn5TNc+aTE/00KIF5H+AISQzDIXFVvRKb3B5FzjgkbPFaV5w3mRF+5AyMUxhrSZwRlUBZDeDavY0RmcpGXkRNRNMXp6Tyfz65nHJ4KcIAR1oS3v/qrvzoSdDDxSO7rp2k2RIEOmAkQoJrlJuV1jTjrOOCu/f0YhTq+SQEkiWUIvYcR54Sb9wQwejKImsiTB/VHKirPK7Sb0f2FtIbSwGleqFCgLMalMArVNvCokxzHhjR7tdVTDwe5ayTczaBLxsEDGvD87d/+7TFR2ShPWWAEexA1+gognwtfAMoLOT6XS0rCtUFZ8kGeMaABJJ+zMH0pRBuc20D06ABx8yb3GEelGTNwvPISwSScgKh90uI/101B7msEZJ6GZwFboa15oLxPUwLlWBpvOUMvBjMweBUiPAlpfeXa++DJ8xhJmuEGDwESb/QHf/AHx3ltFKKFP3UCEUB4omayeR0Avf3bv/0hzk2IeNTa0fpZEGk3feiEec6ZWG9onjpAG5gtG4T7ih4uhGk0BfTNiWnk9uBQVt+4AJCRjsbwPHIiIACnzfLOk/KmYCTlVs4BjdcCox4MJMaW4PM+6khAwyv95E/+5AGEGXTbREBiWA+cf/iHf7j6u7/7u6u//uu/Pma8nXONea42sfGcQQSOhu/lQS95yUsOAc8clfFCgdM8EaC0BUR00s5Fuu3Hue4L0DmINjhvABDZ0DwNgHggLt77VsEbmjM4kEqSvS+UURaQeB7wEDlQSwzBVt7EOxFhpG+8tu8atI4DWNt4GPUCjHyI4Xkh0Fg341EkyraI8DzCFXj+8R//8RAA8UAWbANImBMaASn8aav2yc94l3Ignuft3u7tngDknOPlTHNSspEZfbVrQJnaBQwdQnsMDjY0bzQAMRYPpMy+By9clbN4Tyin0AYe13kFTnmReygZWP1Yk97e/mqN49oplhJ4A8m7HgoungxEDAwcngbcjN+mNDmNeStgCFHg+Zu/+ZvD85hg9Aom4cx5M9buE+qEPOXKp+RuDA2AcqCS6OmBeKnyoUZkjSoLZ17TSwMQHUN76dXIkifa4DxVgDYwp2TDcFdRht6tZ/vcD0nlgZq+pyRKyROByXVeWymnVL3UtTxM21fB2Y81yA8AI98CjRDlPG+iDsDqnwqFMKMrUwxmnNvNKDFuT9GE55//+Z8PCaC52u9+ACmPFzJPpE7g5jEDo9EZLxRAdFAu1JTEhKgJ0uarQEQvLa3QKd2eg2hD82gAXQpR8yeUqqwAohCKoSQgtS1jroW1c1APTqHlBMITAwolen/fNwuMcgNGBFDepA1m8jHKM0sOxHYyAqc9RTwMeDxD2HrNa15zCIAcd4373A8g5Zqg5NUKZYDlHdW7kFRHAJDcJ2AmQE1Kdg5ILdXoYI1SC+dyPSNVud2pcLahecEAJJzo+RJURmN4UAQQxbSMMIffruGiKcpnkAlj9TrveQteQtjoz+Ao0bM81zEA8TCFIq8gAQuDG3EJOcoCRBI8YCl0gYcH+vu///sjgfZsAPFueSDhUH1ApFwGlfRqW0sULXM0nAeIY3Npo5n2Zqn7TE/ND9ENfSiT3nQ8Hq9F4qcFEHk0gCiQYhmKV+CBSpZbIG3UUbz33nk5jbxFAkxhzf/4rByhyjMoi9LkNTxAw2nPk3+Bg8F5Eh6oDfcgApQQ5B65j5FW8zxAAQ75l3/5l0N2Ag0g9wGoLzYKYwGk3XrszOu0D0CA4YHAQRczbE2I8l6t5HtfmAeQsNZ+KXAZUABgjsw2NBcDtCG5TjYQd5WWMcRn7lwSrfE1uOl7n70GUjOxPI17vIKoHYzg8l7vBgpDgYd3YUwhDbxmiUECBp6E0cFTyAFTuxeDZ+Y8oPGa9yl8lUADqPICqDAmD5JMAxw4fZlS59C+8iHg+EwXhenW0VzTea9BRE8N6+mz9ULX8XSOGSwE0Ybm0QC6BCL3GiYDqKl3HkSvaaZ1Tt1reB4pT+RY8z0gai7IZ4m0MkHKcODhOYQUBgQVzwKO173udVevf/3rD+MDhdGd4yV4oOl1eJkJTSDlfXgzZfBmAdQ8kDLVRd6n7TwgXfCkwgujCj1NnPJCoGkCNG/THBBoeKK8c1MCwPJZ7pMnasjfDLxn9LfmG5pHA2hDcRcpgaZYhmbwVuLzPG3T0Hiw6EkUR6nOlzS7Rw/mjShEPiW/McJTPk8CAsZlUIlzE5gACgKeY4Yew3fXub9rCHhe+9rXPnlPADSH7xLzygEQj+Z5AJJEA4gnFFr7oXF5Gq/Z9+Lm7HO5XqPTPFLrfDywYz63y5HOeGQg8WzpElAAcg9oNzSPBlAQ3QcmRubOJZXN1eiJYCgPoBiNToFNLLbAOM9TCi+kAUY4ypZfMV4jKF6BBwIVIwKsBdDOuaeZZgAxtLylhBlI4JkSQHkwzwIQ8EqiA0i9GsoDyFwUgxRq6abtK0BoPky7vdJDyTPhhQgY6A5Ura+5Tn7VHu46po5oDioPBdoNzjMPkLkYCuXGNUDjAeCVokoai93NLhNK5d4bdRTnKdd55UmUgQAWkPAEwhGxBAEO4U0eAmJ1kRPxYEDmFcwTOc9T8i5C1PRARPib+U8A8T4A8jzfgBWqPXPOBc0/C5YHgtUxhmPcQCmEt8QDDvppoNF8GejooHwISM6Bhyeir1ICo1h6Suc2p214zgF0DqI7AXQfeEhfJqS4vvnAdVMcZeSey3korploxySYFKEnNacjMW7ILq9Stl7OaM3nFFoII7rGPWBRRn8hbsjvPWPzSuAAEYBAk4DJSEx+NBNozxEu80AAArO6ADVY6MHzGxUKmXTKM9CBtjaCqqPkgcsVG2C0d1wHa64oD0a35ZGudaz9RIU5718wALXnhvI0HBjccNtZc88UQEkTIMfaNwygfomMFwGKnt9XmJs5LkwFkPeMCZJyAe95LnkKLwUcRneP/ImXmXkPmQk0wJoDKoSBSJ02QHmgAGpjmikHQ3ttbQ6seRz11P5GYCXPRHhqu4vPDffz3rwQoddCmevovi00LX888wBRkvCip3tg618aASC5joYDpTWfJtqco4RWsV0vCWd4oYbhW68KoqQ8yHGhhnfgdShNAi4va3sJ4yujPT68C0/TyIu0eJr3IU1I9t37RmGFzes8ECMzOFhavmiQUGhuhOZ880PNQHsPMIMJOsozNTtd0uy4cpO8OBt4Dyg2eVSA7gqRxJGxgdTQXUMJ191c0EySAdR2DMfa/uBcM6yMwvhz7YonyOtMryTUgKjvgrnfe96H53ENr8LrAMR70pzR9Dp5nobwPFDeLoB2DsQDC1dCJ4AY+8UvfvGxEk+0Le/TAKLOVYia+RFvwksBqPXERq5z6UdZ7gNrE5P0DpyeZTR8E0AbmkcFiNIoUOjplzGaQGvfjs8UVRIdQMQxa0Om+7lyZchZJLyMI1SAqC0X5TzlQDxEAAklQpeknlcEHW/hOl6m/OYUSG0cI0029sMNeaCG8cpsMlHnMQIEPC9MD4waPC2kaneSB2oqozUwnYmuGL5Eui8f5Hnc55jOGUDunbPb6bykW6c8B9A5iJ46QJRHcSohgdNwEAUKJWlMPaw4XgjTU+ZGKz1LY0EgLAQRo8k/QASMhHdozofHausqD9FW1NbEgJTHyvM0pC9kBQ7Z94J4AwTU8iAh0yw8w+WBrIGZA8ojNPnHk2RkHqgcMe/tmnZi0glp50I7Nem3/KgpgJL1RnA6qJEo+5yDaIPzKAAJFXqge5o41PDWbHLFFKJ3OQagjpMJUK5eWcoXhvRsz5BUM5xwxhMQMDFsniLDgofH4FUsmApjvCQBZWUKRc7vnCcpzyqETQ+kTMBOgJSt3gwHHls52lBf++mC4ZviaITK+3rfNXSjQ/JCoEncByDCI9Ffi7OkcEaPfQZfo7INzvMKEAPr7RJXDW3FWIXzLpSVq+19Q9k8VfuH9VaK1LvM4fBCQhnjNA8knPFE7RECUcm0Y+Zp2hTvevcRxpUf8RDyFPM12iDxdR4cgTjBUe65EGbeKYAM3ZXLoEJX31JtEjE4CF0xcqOwAAow5+VJrQm2f3zuJW/XoufNLSKFssqdXug62eA8CkCUByIeo6SQ1FuAApBGI7nwhp15qXIgAFGGY0ZSciHlCw1CE4O1KSyIhJUm+rzvu1yubz7I/JDcxISikMAAzZZTkraAq+USoPA4JeqFsAAqiZ4Lqu4FuymEtrR6bf9zczgBVP6TkQOoEWrJsvrKC71W97a/FNZA2MZ9EBXWWpB1zHVyoQ3O8waQiT4G9J4x8j6NMPQQCgNLI4XCl9cgIhreNxgo3bXKaETGS/B08iGhLIgYM08UUIRReZq+IqR+9Vz1FcJ4jPYtGfqCi/F501b7pzeaOVAACWEt4aibenpWHQI8zTRPgOpI08gBBCyhSX0LV0BXR5JHcg19A4N+64DCZTmVMn1Wvk6so29wnjeAKEyP9HAhR2MKSwGkNwGlOB9AGjPXxdpDXM6gwa7T88xMG1nxJgzfd7cYUbgSTvrZX/AASygxn0QB7bEGhhzIde0LEsrUVx0Yy3IAsORFLaZ6D6IA8oyZaxXGeCCejmHL6VpN1/4AKoQXvoKn8AOgwhc46BZAQG/P1BzatzpPh32NOq/jta8ZeYaknE42PI8OkGuEDMZq7kdjcs/t42meZwNEeU18+dy3FQCUEiiXNxPKhJ/yIRCYf+GJJLJAYtA8UttYJY16rDr0HXmguY9nYgTwuAZs2gVQ5RiJmQdq/9A5gAphrXvxBuABUd5gAtSItNn5jN0oagIkRKmnOuaFdAh6mYORdFjIzOuQJmmJa+llw/NgAG1QrhP5gvkSCtQo3ie3TJqG16v1jgDyPoAcyws5twHSY8RyChRaPNekZb/Aodfr/Qw5IcqzANu9FG+aQS7Vd7go0nFgCsXg1CblKkvI6pfPvPosz5oAgReMTSbyktqt3tOQgQGYPBCYtC0PEUBeC0t0BySvvE6iTemwKRGv09sEkNfgoVP3CNUbnkcHiLvm4hkRKLxP+QyhSI3liTQwgALGa5NfPjs/AdLw7qH4vvNufUlS3PzQhKhvnoKAhwEQ5eutDOI5ejQFtn+pPdyMX5gER+tr5UCthQnZjfR4Overg5ApROog6s4D1Qm0oXbQTe3V9iDrmjyQ+jaSBZG8hz69Oq+suQbmuXmcAJrgJO57qgDdFiTK496BBJaS4jwMcGqwHt90PWi6VmOCKrcPoEZirslTKZPHMERug1kQ8QAM2QYvIc418hl10+MZwhYHdWdsYUcblNGPcGo3qFo3axTW0kmr8QHUxnrAulfI0R7Gy2B1gumBAshx1wRQuVLTICXJXnVSuvSMOl8Qpc/tgSY4JfOuo4cNz6MCROGUqWcyQI0iAdS+YEb33nFKpCANzgtNL1Mi3fDXPZTHg1GYfMUooo31RjwSXkYHESjKR5yT11CMmK/Owpj68jjClrZI0CnJqxAnfM3lkgnRBqi1MHkZWLUHBBksIOo42jjbzcjlSQ3jdbSWLEDP24BIR+CF6SKvVpn0VD7VqKuyy8XKJ5V1XQ50HUQPDhA3X06gN4vJ9YYAEjrkRo0cVLyQVS+sJ9VDc/19o9N5PY/i9Ej3UCwXvJNqEAklDMortEbV5CGPJX/SNmBRIsDVUX4FKGC5v3W3lj0KYXM/EO8DVvcoD9wZMK/ifflPC8n0kzdm2K4tkXa+6ZCWhJqRFtam16rcBiStqRW+mtlvNFinFmo3ONfBcyeAAuQcQM4xGKVSqIRWxRpVlNgxdCMHX8sBguMaSEmzJzaMLV6DpzkUcLq/OZDWkDRMfUAB4pLqvurDwLwEiOQ7/ei4JFp5/RaRzWpAbI6piUpehucpB5oJtPMzdLXpKzDKPfJAxLn0MztL1xbCeBieohn71hJ5eTqjq8BzTwDl3UrMlZkHygspm6ekuw3PgwC0QTolQgHl8UCUCSBwpKB6GUP3AwkgIpRQT9SYeg5FzBFDk3Aarqy+laExjaL0SJ/7BY6dVAsvAOItDM21q5BG2jWoPQDSDh2j7SM6x9wuMvcBKd+zeDVtrM1NDJYYA0Xb8rCMW3sBEAiFL+fB0vKO8uipkFbYCwo6K4wpt5ntAHJNndF7z01vG55zEN0JoA3MFiMVPVCiKQmleJDUkBJpjVdZxtfjC2UU4TouWiir8RRY75qxmyKUxfWCR66iHAYBrkarlzAFIl5BDiSh7gcUgAQs4U5upA3mhYj32uBaHsYoq31HweN9e69L0kGrN+dJeQqeQ1vqCHtUFEiOldyWzziuLMDQnzIDSEjzOe82l3xARffOt3RU+V1XTqkOymOPDc4GSJi7F0A3QcQIrUPprcKH4XKJHCWUB2m4Htrv+jB8211LDru+XGi63pLRlE+hynXeVgn3AMvwXr15hDwJiApnvBGAJNy8kWtKqIHG05jraeNYK/Ft5+B9QKisvsIsb2IMhlMnbRHK6AAUOlIgzZFQSa7P5T3gKfSnR6Jc3shrXlrbAdEmtXIs9xqlqVPlB0/zap7hvIT8LiOxOwG0gdlCgY1C9EbGEF4oMIBKkvVKXmKGMgb3mScCGChc23B99p4JUAqhOPC87du+7fHefcoFUZ4I1GARZlqJJzPRBhVvM78jHzDg6Ri4eLHgUT6l8jbgUXdGlgdqo2PaUCeq/nUK7/O2DK/N7iGlAXkUxp5zaHUuUx104LUwRpc6KTsEbeGr5wGnfFL+d2phdcPz4AAxSssB3huR8UDtzyVNKlKuvKc5DOAkjK7HanBJ9RxFFLcpIoAcCx7y1m/91ocS3Ut5QSS88JS8TXlRAgShCDxgmfC0lcOrY967ziQleAzzhVChIo/R3iejOsYpHDO6cwDQJvUvLDNmIzTlgGUm3B2nR3DktcprbBN5m7d5m6MDFcboHxRt7Qhcum3fUF/1EZ7AQwDyYABtWE6JnswAfZ1Xj5QLGGJSWAl0EKm4Ec8UQBXS3Oc6CiMpLI+TF0p5lDYBequ3eqtDoQylTEpoiN9P2smLhLPWznhQo6pgmSFrLl/IfeR7rbJL2NVdGwsHQjGvSjc6RjkOowJMHlhekkfQJm1s5FYSPZPu8qAZBgtfOpG2e3XcfeoB4AByH2/WD3E1CDm3oexigG4DEYAYQIhgIPlAv6KqEa0Qe0/B3nPvbYDynjBEv8DRanLD0eI9ZeWFUiBYwKMHUuJbvuVbHq+uEw5BSWFGWf3AJm8EIt6nn7SbSxV5oBnOGmUCT0hs20deFhwtOdCLER1jFS50BNcxKE/rmDqW/Gpj4DB2XimQZjJe+wmPq/06jlfHyg/plM6n97EQPQF5qgBtWE4Jr0P5XLoRTN/EmBN9FJtoGEDaSddGM8IgjO1+oJUDUCBFNpyfANUDA+gt3uItDogcY6CSyX6MgWELaeBveN9sszA2w1ejrgmPNgoPQV5+Bw5hQEIOWG0KhgBynfpo2xwcNCpybZL30f4Jjmu95oFrP4Cco6t0737XKptnL1nuWxn3AojhNyxbNijXCWMY7kqg9UqKK4RRLmjAFEDNpFIuz+O1hUJQFYv7GkpuPS80k+mUOL0QeEDkfSHP/Xp93kjo4SnntzzaEzSH7U0WCltCtLClzeBhIHCrY3MzQpcQKTeSAzmmngFUHgMgr+rXYnHelfGnN3Jv0GzRbvDMPLAy1E/dyh2VU252MUAbli0bknOiR+vJejGj6OWGtG3bqCfwOsFTopkHaqHQNf0QZltixf1GInpivS933ihk5kEAolzXEPfKQdQHrCXY2iqk8Z4l1O0naochwHgd3tWebGCX4ANi5nV9zVq+1e9hV9ee7xiQtT8AGl4XfhJGDxYQTJnwBFBeF0Dq5jVA1VcHfRCAGH5Dc1+AXN+WBz0aQHp5U+0aUtiitBLqliAYlLTek4EBZHgJrnIhIFBqMZ1Q2ASI5yHOFfpafS8cgLKlFUrSDp6UhwEB0RZw8aqWN9Qnr6ouDdnVWa7hevmU3QjK442ao6ouPtOL8ryfXzJ0nXa5rsQ7zxM0eao8bvcXxojr3d8MON14pfNSBG1+ZgAiZnC5eIkp5dRTufYg8p4RW9fxmfLzPsQ5HqqkujUq55RDmhsiE6CUSLmUDJa8FoNL2gGrLs3WFlJ4QQYXeptx1VPlTSBzvhElcMp7GnFZN2s13nthXJhyrfoxIA+gffRrVKhefc2nkKw9eZ6Z70x4mvMhGyCv7qnjeO8ebQWu/EfbJjzPBECEFxLK9FgAMQAF62kp3vu8TxC5hmLBFEDlTeBhCEAFnjIa3qYkygVOBiGFriBSntBIicoqt2qWVx2b6a0+6lE9awdweDTnwQWY8iQhkPcyN9R6IAAA4R7HeTmQFnrVHTwBtHOewAmeGbqCp2OF7XTTHJJ2NKWx4XlwgDYYtxXgUKYE0oOFssJYXoihvNaDW9uZuVEGm3kSkHiPDJonqqeVE6RMynbOcwBEocqUezQKo9BmeyfcwdKUw5TqpS5ANHVhdNa+634PSQcCUGFEfSXu4PJsnjUo8lB7lDW9TvAks62Jz64HIJ1ot07TzkXQbnCeKYCIUEaBbZUQAgpjM/GcYYCx6vmM1FIGca/PDAakuVEfjMqjKEovjJEAMh3gvpJK79WrWWmhRJmFI14lzzM/C6GM4VqhUPuMOvu+mfBVCONhANRQXfgT1sFDNwDmUYMhgPI2jZomPFOc8woa9weXdpdvNRMtJLc8saG5CKANzUPAk4DIbHTf9GS0XH+JcF4oiIhrWhwt5OW5vEpgGYNBg6gRml5HsTMPokgjIbBoW/uJKdWIqm+2MixvApLCaK/lZm1kF7K0rZ/W6xfRQFQY44VBBBpeBzS8snr0Sx3Kz/BNS/TZ63XwFO6AMq+bAPG2dCVcAwAg9/2hTbLheeoAEb2MAvsvC8YGAjDKX4LKa8DkmWZoyXMFUXNKgebcDGMzmdTTGbOv2gizFKat5msAZNjtFRjCWsn8zIMcY5C+Q9YPOLTk0ey1V4ut5pLaXG9gYWJRPYzqPL/5mTxQQMwwteEhrtXW6bEc127v6YKOeP7AueS3oq8FiJE3PA8JEJEwCiEq0XoRaW0LRAESQHmoQlMr0z57D0QeDUSFMeJcyXRhjIIZnhfgbeQofU+MgXmO9gb1owhGkk0C8l5etcXQ3KSi74P1O0F+eGH+7Mv83SCAKbvvhvE8AOX5dCidKIDUc3qg6wByfQk5/TUC7Rx98ZLpfMLz1AHq84bgEmE4PUHiag5Fby5sNVQt2QNJEDVqas6mFelGFsAJIGB1XaOXFO6zUCfnEVbMNoPGDDNv0c8C99uI80ek+k2g/iejX6wn/WLZ/D2h7gUTiHgh82KeK3SB0uQiHTMwDxIw5wAqF0oaYTV48Nm99KBj9TXlDc9NAJ2DaMNzEqCn4YGIMGbE0ddPZtihCIpkaO8LWUFEQZ2bCnOPcuRLrkuJAek8xTsHMsrjBfqBhDaLMfqGY4MyX+fxpN8RCqB+k8gzPA84whfvY5Ze8k0XweJV3bVhAlQnmAB5Txd1Ju2jS4MPib3c7jp4bgJoQ/PMANT/dhlGGoqLz4yq4RTRPE5KnF4nrxJkTRw2P1JYCxjHCo2ua2jOCzKeHGhu22Dwfpn+FCzz2D6+IeoX7Od/iMmt5FxyH0N3EAFIQj5HULW9kDYBCp6S4zx1M+s6pcS+fT0bmksB2uBcC9A2/EOKobIEVB4kqRV+hLMSamA07xEcc1Kt+ZE5V5KCg6VcwKt7KD0YPdMciHBilGS0JE9h7P7eIE+y32/Z8ARQP4WnzLa8NisP3gCiCx1ohip1nm3K25Qkax9d6Xw8jRn+dnG2ixAgQvWG5o0CIEKRktJW3hvp6Ek8SWGI4pJgSuaxCUy9t8m0QkEhzfPkYRJYoyKJNC/UjyX0m4j9LmIyj88f29w/xum134+e+4aETUbon4RMbzCyHDBQ8jbez7Cl7uDXNoMMsLQMoUzJfYuiwfPQAG1o3gAg8hjwJP24ARc+J+nEcEpqjQtIgTLd+uytweZYQM0pfu8bwfF4eimIzckY0vMQchVG76fsZjJ9SvY1E6D5663gNLITuhhZ2Kqj8oTqlZcJmul56ABkOhjdCP2MBpD9B7uBcwlAG5zbQPQEoMcWORFjMupcE/PKGzF4CXO5zZyqB0cgTbgyhvflF0IY16/38gKebSRke4YRktFYEJFGXlMalc3RWSO3vFD5T95Hoi5UtrWX0YWuQrnOApLaoAM0ONBudRZ2eexWz5WRbGjuAhAobgsP2eA87wAlGqRntXTR8oWeV3LcUL/cZ3qkksugmWGgsOZeZVJU38qQi3i1ZiWUSXabBORBDMO39HtAzfUEWxDxRiXPfV/MnJOwBQIAMC4PKAz1k3p53WbizWd5BU/hqnsfEiDyggeICGl6pMRQSGt43wisJDiQ6qWFrFMQFdL0ZOUAk8fjdYQuE4V9R2xuZW0ba/uf20Q/pS2u3gOG1ym0ud7QvQlEZfM4ci9hjLEYfy4vMIQkmIc0AUgM8V0zDT/huStAntPrXTxPssF5NIAsZRBx31BWAil8NCIppMgP9ExG7p8J5UUM38QiqOaQvhEaSBwn5USFhOZJlGOY29evSd8J6ydgWtfiPebSRN8Hm5+FqGDLG/UzwHIf4Ut4NGXAUOBoj5HP/Q4Po7bU43N7jxgnGDY4dwFoAzPB2a/nZIPz1AECTF+fMQNLhA8Llo5JLPs6MagYFkzdDy5QqTzF65FteZV8t6hp/mNuhxUKA43naaVebsV4ymIwSxKtfc0vFzJ4EPXzved+E6jjQRU8betQZlMXJlLb592eHMZWnyAiN4FzEzynANowbUBukg0Ooc8X6f1kA3CJ9Idq/V6h3t53r8zKOuZc0/uSTLCBhjTU5aWUpfF6JTfftyeFBEbwHlzCXxvzTQ3MrSPyKd5MPqGsvv/dV3qCx/u+4iOktbJuKE76frzXfvkVKHMTft/MbU+Q8tTbHuSG4ABSX0YIngkQ2cBs2cAEzSl4JkC9bkBukoDZrw8GUMNTnoSHobh+PZ6CKb2ZX72VsoUMOcn0Slap+70eAPXfYH3LoxAHAtL7QGIonql9163WmwPqKz0MxBN5BbpkWn1BbW9QP2+nfupP2lzfe4AQ13gFTed0Em3XaZSpbv0IlOkLHqltpQ8J0IZpw3OpBwJM8qAA9VMoAAICKCiwXlxO0YRds7UtNPJI/SFJYa19M8REXEkvoIAkV+CBQNF37EneCEiFNeHLcdczHIVqMyVQJo8nvHo+r0g8L89J9nuAJT7nXfthTROVPJsygeO56tSMsbpWl7sCtGE55YE2MPeBh356nWFrysUAgUe48Z6nYOTg4WXkBUYrEsw55G3EwisZRruHwoHUL2SUM3l1nLGCDVjCXok3OApjDOM1T8QL1RMZEXDB7jn9lEuwEobnmbSHdwKUjkG8J+oLlD6rG3FN4VD51Un9eCD15QF5SJAzzG3hOQXQDl2nQth9AEqug+dBAGprAiNQVpNzEszWmeZkW5IXasYWRHpwbr+v1CQgagjeBq0MxWO0vsQ4jMTjCFtyH16ojVzzR60YA/TKV4ZnBA/xPo+UOK5+CZj7aRjv1SfwvPKYQAZR30X3XOHLOhaIAO0zCK4DKFjm+wnOQwMUNPP9huc5AN0HIqOmAGIcStQD5TxtlWiNqYXJKXPird/Z6fcFKZ8B80KFFwaaP+I9PQCjuR4s6kVZQGEc1ylPCGGE9ie5RvjlfTwzGDzL9aCYCb/ye90S7O6rHPXgBQEEXuHX83kgYdjxFkebbQ6UDdCG6RQ0lwK0oTkXvt4AoLtCpNe3QMhojMuwrXLzMCDZ4LR63eKj8NbUP08kKQVihvRar/YeLK4ppBVaChuE4ftqsfqpl+PAMT3Q9/YZUlIrFPaDC8FTSGuk2NyVa5QrBE5xXa/VmWc2tcALeZbPIPDsRpVtzwVRv8/DYBuauwC0obkLQNfJhuckQLeFqJ/S9UqxhRiGFZKEpr3PZgMURHv9qDkUOUZhIjCCqN86BJPzXZPH6LpGeMqUZ1EEgByTv+n1DGs0ByQhBDTKcj9YtDe98La1GVTON+0QZF5Lyl1rSsHUgrJdrw6NzIQveVkA+VyYbT/zBGaHsOtkQ3MfgPbnDc+1AN0GIj0w5emVlB5AbRXN++x9M2RuyhLieCv3uJcHmz+X26imRJZxvfJAJd7JDEPq1M/V9Xs+jMjbCC3a0ffu214CKJDwQsr2fLC5h9EYgBFBSIKr9w0qeCHwOgYgoUq58jTP8KyS/cIYkORuAdSPbQl1pzzQhuahAdqy4bk3QJREwXobgHL7DNyPbIJh5j6nAJr/iOza8iEejMdQFoh4Gh6nmeNGQH3OM838pcSbl3SeRwSl+oNBGxlBItvPywgzEl3eCGju7WfvlFn4oWiGcI3XyiPNhelgnu+YRJ53A1mTioApsQZvozT1cQ1Rj+a55HGeext4ngmAzkEEHIYCzwaoRUkGm5utNjwB5L/Yg4jH6t9v5k/nngJprmfNUY96ldTyPurqPkArT3jRBiBQAG/AoAynp/MAer7jlM37lLzzerwZEABBhBkjv4zTTwS3jMMoynTMe2U3RwWevvPfFIQQ1pcAGS2j+qx+3m9YTsmG5lKANjj3BkgPa7QRQHobwzFm8z8gaAS2IdoATYiaH5IPgajlAt6jJQJABBNoJ0CN3BgP2AznfmWCUV3bj9N8DAMyLAXq6c1yO8/LOF7eVNlyGwZtW2kThK51Dz2Bt20b6uE9SAKoOSllOC5PclydGJpn81y2UGefZxjb0DxzAJ2CiHvWE/XuAOLqGVC+wNBNIM45oHMAFcocm7v6gqhvfYKp3AhAPBFo5jxNI6HyM/VtSsE9whBFMTZFpzShwmeGcSwFpXCvjMjDTKM6HgBgMLrKcyiLJ2s3YltWmuB0TwC2WOwYeJUBFM+jd8A229+znd/gXAIP2eA8OEB6FcMxEjedqz4FUF++m9s+N0gzDyJzfqivxbSASRqhNenI87XkwTuU3Ld+5rU9PJJuADEK0aOd58kYxH3aTGFeuzbDuJ4ReJS+opT0RQECCCCBkndzL+8j7zEr3m6CQiWP4/qdD+UZGyEyMO9WAk/KyYJ2A7NlA7Nlg3MOnlsBtCECC4CaXyEB5HjrXwHU8sUGKC+UdK5Z6ryQUNgWiVa7y4maK1KXBBCgbp+RUAtG9XF9E4Zg4TkrE3zeaw/vxDjK67v9FNkIjqKDCDgl4HkQhm8+p6/b9IsjAea4+xm1kAoWZZRMK2eGOeUAzn3NX/FubRFpg33iGCOr720A2uDcBqIbAdoeSI5hZEK5TSJOgOQZAOI52mg1lzICKGAaynvftxwmQEZl7fATzpTtGTxQvzDv+eqlLi3sqivDm/tRpnIasfFgygAnUabyeCrlMGj7mRrNZYDaDCZG4lnKcwy5G5Kb18mb9AsfYAABbwOS9ibRs7IbEfJorvG5GeomPbd4rnow5jS2YyX57p3XbXAeFSBzLRLXZqG5eT2ZIRmUd5CvTIBmGJvCsKfgAZx7eDBGDSJzOfOvBdoKYh7KZyFtundGdp88S3kgIcrzHM9TfhvGwNSoS1u86hjey/mEC3ACCmiFNAouX5H3MFYeZK7Eg6cRm/NNFLqvdbyZ0At9oARKhvcsr80LzUXY8jPSCr9rPKM1wkAMqMq7CaINzr0A0ispE0RCRb29UVhLDEJCk4kToCCZsBS2JjwB1DcilJE36qsy8hbGZVj14l14EsZtQZIC3Q8gZecZ5Vyve93rjlfnhTflq7OOoSzHAKVDtDVDm0nDep6okZI6tHW3kMdA7f8pd6FThgITQzre7LV7HQMQoyuvPVCFT6Aphz2cL7nOFqUVOnY7PUu+y5mUXd1OebAtG5o7ATRBUgmGa42nYxrf9L+RTl/Yk7jOPGgC0vvtdQLn1DchlMfIylcPIAOIYsHUIqvPGkdhAH3Na15zQAoer//5n/95yL/+678e5wOdJ5IbKduxvKNn6hg6iefJo1pr4yXop6UM9zMYQwOF8QHEY9AXWLyWPDdhCXzn1N059ynHuTxUMDTbDZQ23rWj0/Wkes45Md61TXvKUKbng6R8acPzoAB5KAPpgSnJOZVXSWBRvl7bXND++kuQJNvjBAwDJsDpmxAg4OH6Pw4hjBJ4QQA5RqEap148Td5GuV5f//rXH/Jv//Zvh3eqDupMwRJ09QCe8yD3WbtaoNVWENGJZ9FPUxrOe7Zz6uY8gHiLDBlYPII26ADuo0/HeQfnHANCnt69QO0r0j3P8YBRx8Jv64NzndB7592rDPVunkmHeGoAaQTlajDP44F6RwurjnP1DFkYaydiEHmdMr3OBihoSnZJw3r1EFp4hcJGs9aO+UxR//7v/36A8trXvvaABBD/9V//9QQgxyXyIBEa9U5l8Iqudb4wq27aBZ7aymA8iTCQh2HMDN2am/rwGhmYoUAEEuUpS5l0LMQwjteWUxi+/Kw1PqI89zUP1qSqtssJ2zE5d1Q2CauzNfnqOaCkS9DPfGhDc2+AgEK5Ki08lMgVxvQAFZ87EhkcBIAA0pTC24TnHEDyEiLUgKWZaI03ZKYQoVMd21LB4wQKCLwCSAjjmXgZAAGGcrVD2YBy3HllNMHZmlrbWY086UZOQxdtCZnhopwEXHTH0E1YAotn0Ba6c32enSG1w3OEUNflWbSN4Yn3gdM6ofJ0ZB2tidcGEe3tblZ/Lko3Qdwk6YMBRCgHGJTQA/QkMOW+NYQhSqYZu+9PkRmW8kynpJxnglNiC0ojPYpo85lRjXq0gZ9SKIOieBJepIQaQKACkM9AcY5x3OP+AJInuaa1OnVTD6PBJjjdZ7JP2FEHEAKocCXE6N3e8xZAKf9oYJIhAcELNY/lHrqkR8+ae58KTXN7bR4mSAKlzf+Os2F/DEhfPjueVyof05a84XVyZ4A8WK8oUdWLvNfokunC2JyVDqAp1wGUNwJaAIGG9L7FVorRcL3fHAylOufZlKGuFOR57gXCf//3f1/9x3/8xwFRHsgz81pCL4+T9+oax4TBvkBY5/A8IBhy0wdgQMUQygRSIV79eK0AYaj+aoqB1VlndL48x3H15wE9M1gCplCVl5mQeC20B1TwsE1za465t8GJunt+I8oNzoMA1PCvMCbeO0cJp76VkUxvtOGZAOWB+iJf0qQiJdTDeCHLA3oMZTVfVMLIQO7liUqiC2OFMPC0cj8BEvbmWl0QKa/OwZh0Qdk6k7IYwmsjoUKMZzQSoi+f8w7gYriWiIBHn9rDK3q+jgMaOnZv8E046H16mIAieWllakN7sFqsnhCBWbjd4NwLIIrRSD2K+20qvTAmzjcr3WisMFb4IYHEUA3VAydxPK8xlzIKHaTtHsV4dbFJnXFc57mU0qKrXgog3meOxGYO5L7mpwphhbrW7BgSRHlD7VDHFmrpqcnIdkx6zUsIv8BwPTjKUwojPFjhz70gc54HylsGTUCQ+TPDhdcgakeD1wBrArVO2YI1nbbO2MhQuzY8dwaIl1HxZmVN4YNIr2+eoklFynNtYQzlQXQKoAnSDF8tYygjBaWMvE/Jop7bIiVj5blcyzDAZiRGABEPFECAUI7neN/iLoBIQ3oQNXOujp5RKKZ0HYseeL5CyNaD9jRfU4JciAFYg5G8T0kxXaib59ONcpWpvLxyHadO1k6GwAme6YHyQl4dd716qANbA73piC13AshoQ8FcG4DMYrZTTkjjksVssV6P65upKqRRG6LyoOsmDV3rnhSRElqRV5fcOKFsoyFeSH1cl3IZsO+eeWUIQ3xgMIhnM8hMoPNARBibe5dKyildW7zXLu3XmUAAitnGOof6MAwDuSbPkNdwHMyu4YG0HZyOgahlobxx+WEQBNP0QnmXOmHePLt0b/ewW8s5Oib7n/JCtwKo9RXvm3sBUGsqCkZo8yCU19C03qeytwHIZz27SUMN0vDidyOGRi3NcYDCq3q0N0fDXT/DmfvaY+0ZDMEgnqtc4nM5D3AaseWFGtUBLS8JIFBqL10Jo4DWZuXxZoVAz53bf9PLLIMRm5zNqHlQdW0G33H3zwEGECZApyAKoLxPnt4x19MVnbIjT8g5yIV2Qn0ngEiTVAzVirBCAbWH8wzFYCXTKqiipwDq1THnKENjNBY4GZdygyVpJEIkn1awDavVTR7hmcr2/MJEE3NgZTjP5QXUGcjtUwLN9ECgmnuX5CXKd0+Tjc1E04HnaZvrm1PyLMfzJmDovGdoL6M2t0MHwAK9TsP42uMedfc5EPIkAVQIC54dwrYH8uoYXdA10DmE9kbdGaAJDxGeNERhDGTuQ0Ho5Lo9qGFs4WKGsQAiAdTcUJ6nobsGakgeR1kMrNwJDVEn58DL+5TkE0pnKMZWpvJ4B15CKAxcCtTjPBsohSuGnTmQcwHGiO5nyEKbetJDibtyQdL1eQl1aqkFoM05aTMdaJfOyujudV86BUfPZPSZz5QDTWimFMK2F9Lu4HOdkOl5bCmyNPd3a4A2PAQclOJ8X45rJNayBsOYD5p5kApF+wSoofpMrvusMXpjYYcyGx5vgApLAFcvCb96yYn0GspkRMamIGU2jQ9cIBN1ZkAgTIAYeEIUVI43ydiEo/J4N2XzkJ5XGOOlGMrnoGmk51XZdEUPgU4HAcuo2joTfu2qg06AlNMIbAKUR8oDuacQ6DPA3BNAdC4dYP89O31ngLhmro2B2rbZSKxE2sPEb40HG0WoUHnQhEWlp/v0OQ+kkbnRufjn/Q5deabWmYBsramdfO4RXhhO+YwCOIkqZTfH4nngCogZxjJ0xpYbkQwfQODj2UCkXozS1ECe0LWVOcVxetKxGFKb6E75ngVO+miti+HVW5uCqDzGfc3/bIj6XD5UGHO/Y87TQwDR+50A2uAkAAmgvr0gkVZoU/MzkQ4glZ0AEe9nT6lX5Eb1AF5COGg/CzjycBomR5gTdq7VMENpI0QAEXArvzzFc9WtMhq6O84wPFW9PoCCxasR3JaSbfeARNkMzZg+tyjrOUGYVLZnMSJvSD8gpxths1lxUOic6kl36toEY7mN4808T4i2OB5403M14AggkYcNbgRoA7PFNRSvh4On7ZZ6uzzI+bnRnqfQG1U20meOAy69FASucyzvU6ILijZOaUTrSO3Ia7+MV42ypAA0nscOP1tE5Wu8EGXzNp7R0gHleC4D84qM5vzMg4SbvM8EqPmkZrZ9zpNoszYwUkN9z97eJ0/WrLdnA8g99MeY6tZzlQOeRrl02gx5nbVZZZ/nPNOclQ4i15dY57lcK/2gi+xA/3O7x3MA2qCcE0oXpsDTP/DIN9DpfPukW1idE2m8S2FKw51zLa/SkDuwGp4rg9vWkFag26vsXu6V5KlaZhFebSUl6goyymREXojiKIi3VB4DME5hp6H3zHnIhGgCFESOu0a4Ur5erDfrFEDo/g1PHqjBBWm2eQIEMmVN7+5a9VRvOj0lygqmDVB5EXGu0WoANaGo0wLnIoAYToH9tBxDNaHYvhf5CtfH+EKRCqF7AuQ9QFyrXB6MMVXacY3NDdfwRmTNATWkL8kGGlE/nrDphr4FCtTyBgCrH9BBD2BwlaA2oRhE5TklvxOiACIt1AJFG3U4dVQmKKf3meHPZ89rhh7MGXQCRMBJF84XtnQA909ommQlzdjTpbaeAsj7CVDRgV36MsFzAGK4uwJUkgwc2yjanqnAVuYDqBHDHMoHEENqCMPLm3gPdQGhzzwN+pXDQ/TZ9Xo1iHLLvTY09R4cgaRcnlId3c9Inq9uPvNkQpmeXL7WskGz0kkQnfJEhbGO8SgMBnRtB+VMwoMngBrFBRAA1QfwEzjP1wFKgomQB3LetTm4PDiAAwlE9HUquXaM7uqoeaC2eLAveJqVPgC6q0ikGbQN4H1zoM3frYm1oNgWgwCac0GUoNKFKLDwErwRrwZSgPYNTs/hRtWh1f8WK8sXCpV6JuPlkdoopQ2ONeqg4PYCqW/3l/jOicMACgLGzPO007FQVmgDjfZ7HuOCKmimB1LmnFcCMChK/j0PlAGq3LxHHdN15V/a0ihVhwMVHWWPnQuVVAfQzIHoubkg8DzHA91V9GYFzmFy3z5g+HYotjcIySqkgo3ENLY5H0AxtorrHTyLsFJoMzHoJ1L6kzrvffdKWOJV5F7BpLHupwhlNiylDGXynu3FAVRhsL1DznsfQI2awBNA5UETIPBMmVAxeJ1Fmwtj5wDy7Ib87nN8eruS9TxUHROg6gg+4GgLKbQDgn62F/KaTIDYb3qgAHoyCttw3Fa4fJ6AV+jHBQDUtxQYgpdSeQCVDE6Amg9qMrEZWobXS9wLQjkVSH2zE0B+PNxPpvRD40BSJ6FPPXgnDaegRn4UTDGUqO6Aa+M7oADPa/pMgMULBND0QA3rZwJtk9qUIOq9e5qs4zmEoBm+iGOe0bpgc1PCqvsnPIVKoNAvnWknXZa70S0d6jikHJEnKsfMCwVOqYBzQAMcD8+WzQVdDBAK24DNsACaibTzfVPDw2dlS6RTJnD2jLTjrtNLGJISVJ4n6p+b+/FMAPGCTbPziupkFCYUUsAElzfSuwBGofUu3kh850EJiPRMxiiM9downEEZEiD/8z//c/W///u/h3i/YWJsQKpDSxATHgISHkf76YgHAoLnTnhmvsVrBUEANaflPh2oUWv7qYMIeHmh4OnzBkgZ9GnBPD3fGyDCK4BEfgKgJhRLpJ2XUzQXlMtkwDnrXCjb4prmIzQGRPIrXxH23xdeAdQ3Pp0DAuUIRepWUi4nUxcgc/fgBVTltzyQcklfleG5Zi7EIzDq9kBBlGyP5BrG1t4WV0vCS6BLgOmG4QFUuJxeJ3ATHitvq3xl5C3B1EhXe+ioCc6WmQLQa+9LJa4DSLS5N0B6O+OolJBRIt2EotC2R2IBxGiMMgEqlCV6kfO8EIPzGBrCKwCGBwJQv7HD64EGqE2EUU7DTw0vJ9MTm15ocq2E0n15R8dA63p1YkzGICBi2OkJgiiPswEqpDGu9imjrSIBxODgKm9rvSzv0xTBfC4BXpOHIDKKy3OqL11qh6jRbkc6oK85JzRDmU7l/HUAiTYXAeRVRQDT7/o1oVgi7YFzJJZ7nHnQKYCI803JaxAIy4X8845fPrX7UEM8S4yf802FK+C2VkYhTYq171g7AM9TOdewWD1dL6/yXi9nGAA038LweYVTIG1xHWNrLwPPJRJehsE9o3Y38lLufNb2RkIq6LUVCNrOa6pnM9raIAmmw7meWMfxvCCiQ+FtAlQOBCB5Lg/E9rcGCDRbeBgKLpEWxlpYZZD9LY1oL7ENoFMQTYA0jDulAF5O/sMDGdLzSlwzbzGV0Qq7spSvVwNLHZTVNgV17CvC2kNZFMiD6QA2p/Fi5W+8R3t/Gs5PmaFth7g8iHqV6BbGeBrHAgjIync/+E6V23vnwDeH9I3kPEudAQYGAJRe6FjsoV3uCyApw3UA6awPBlDfyS4P8tovTrinRVXGZZAAKg8qkQ6gEmhSHhBAGsSgKu05GiFMapiGuk6ZYrs4rzc2rKVIiSulKlu56kKBlNNQt7ki3oyrN7ozZaBNPruGskGZJ2qENueHSCvzJd2OFYqA0vaOEvISaGUXuh0DnZyqIfwGs8/Kp7/CsLaqXyHTOWDSYYOgZtwLmQHUDLaOxnM3GgaQDstj3zmJ3vCQDMgTAKgJRZNMLWnwDq3KNxKbE4oBQxrGa6iGua6YDJJGfs35AICymyth5JJ7Agj3NUtLqXklStXbPQ9MrtOWFgx5nv4uimetw2iH8tR1ekwGUjZQvWpP63qe4ZryHmEMRABqobYE2n11GgABBEAN+XeoJD7nhZqk1T6Qqk8b9ZQNGm3hfdkgbx9AdA0g150CiH6ajb41QBucpLxBEgueJhQbifWd+ZLWEmkKKg8iGu1Vg/I6GsKwGiLcAKa5Go0Ho8aDx/vmckAzt3p4bfjahJre5fmFi/Idz+Ca+xty/5JITFH0OwDaox3qCF73qiOp12or16/eylU/1wKrsBU8IAkggIOtIXWTh+VP5UPJBkhZdZB2Hcw8KKjpiG4db0knr9eo9zoPRM/0IMqw+40AbWi2MJC42sJqv1ZqWM3d7SWNAGo+KGn0FDiFl4zAuM0raVxTAZ7fiK/EcMbyhqINz9uFqDzng9Z14OnPf/vzW39W5ziP1i+UeGazucpoxELR6qCeXj2rdqsTrwAgMAhdramRRmDlaYTHmgA1ItteyHtQAgg0YAEGeHwGk2N5eHVWrzxxYX0DpE0tUmuP8MfDs7uBEohe5MMG5jbgJAoVWoAzE+l+Dwe1zUg3oUiZXKbewIDNyWQIkOgljSpqsPt9Bo5z7RNq60jwFB6bCgimRmQN7xm6UQcPA56WTPrXaBDxqG2o6nlNxnlm9Q5Q7VU+0Jr19Qz1CaCg8crwYGFQRlRX1weQEAYSwLWO1hJKc0w8kPPuKSVoNlsYC6AGJvTpdeZHdBdAp4bxeaAAOjzQKYDuIgpkCNDwQP3Hw1zSyHMwnoqVSKM+8VnlXeMelW80pDfk1oGoXJVv35Hw5L7crt5LOYXIwiRx3DX1Kvd4nmUS8PQnv8Dxv6teTU0AoSRSLuSZjSzLofJywCmU5kHBC2yhqnBUEt2EHyMzYiESDEAxu83TuC7o5iw4aTgv7ylUNR/U6C6AGpSoW7mcupU6TID2WhhvL4S1sexigNzDENwZeFoXa0mDkZu4youoZGEsgLwvjOnt7VNShrIk5+abrH+ZgeYxhC2NY9w8i/qAGmiUpDxKmrHeseI7BSlXyALP9D7+8RlA5pqURanK1iae1zOad2IYhldew15t5pHaeiJ8MHLD9jwEo5dANwcDeucmQF0LwkZ0EyDH5YS8SqPF9mILjxMgbdGJwO+5TXPo3OWedKpDtBrf2mEAHUn0BuI+gk7GbtuFMKbwORIDmcpQ5MyDpvBC6Hd9rlKFGQv9AeV7X3KsAGrV3nEg8CDWyEDtXgaZCiKOAUiPyuu02t//1gPIex4V+AwDBm3K+1GyDsEwDNSIsbwLQEHufKMuRlUnhm2S0vnmqRzjgXiZAOKlHJ9rY9sDdQ0A1bcdBQGqnuqYFwa7eoBbRy6MBZBOog2cwFMDSAhgYKOV/q5ISJt7g/TIACrEbGFYhqJ8jWsV2X2NajS4eQhG1MvBZuRkjYwwvv+W5z1MOParp8poWgColKOuQUN4H6/K8X/04AKQZ+vNDK1O2qXNOoY6K5eBJkS5/8I3j9DckLyEMZtOaPlGvZQHBKCAoxyoMOeVFwugmWSX81Sm9w3nJ0DlmsIsm5Rg68TOT4DoWCdtfZH3f1CAWhej6H4UW8iZe4MA1AJeE4poJ+CJ/DkHkQG26A0qz8O0BQMowAmiV7ziFYcHMQyXHPsfChCVXzCUsiyHTHgS/zkPQnmRjkHRTf5JOtUh70rJymWcjKSN6k/5DMVgvM1cnyrMEGUyoHLc21pWibKcqZV63mQCRFznmPo571nKbGOaY+U6dVQds1GjuswkWz0agQWQDkPXDw4Q8QBJVT/9T+kMbCTGQ7XZq5ELQBr6CjMqJdcQBokyhCEGZnyv/cONslUepAAVvkDC44CIBJD3wpokWRkMnrcDReErgPqf+QBSrvroBAwoiWVcCndM2xptNdICgmeUZ5T/8QogLEdRBwZ1D+MGkGOtpgdHE43Oud+wPe/UYm3TA64TxvJAAGoklpcpiS48gRxAyi+VmADR25xIbEvHgwDUHmbvhQReiNIB5ZgQ47wKcINyGSHOdeBgXIbaovc3ImJQQLz61a8+xHqYXiBM8ixdF0CvetWrjnt4IOfaP+S5hVB1meGLAApARmBCGM+mLdrAMIzaTkFKbvKSonUIYGQEz2EEvdx5BmTYRjxgYUjlgEjvB53rAASGwGiYDzrXOgecuXWkLSNNIAJ2LuXwSCCR63jmHmGVy6n79EDqDyAdfQJ0eKC+U3VXcd8UBVMmrwAMozGz0obAPEvfjOAFrgNmSwABgkF5hFe+8pWHd/FZPUCk3MAhAACQUAYgUNgCy6sZKRZG1WvCI4n2TPe7F7AABxBPxyDNtTAM4UnL8SgbAOVY9fJGZAzfelWJPA+gjAYVjuWpWsoQvgAAvAYEQlUAJWATxngrdZw7COZsdLPdc2K1dctSCc9pDiiA8kDPSaInBBuSm2Tey6uojJDFSEZEQhAD5B0YJiNNUAA1JXjmnEwhBUAve9nLDkA8h/ASymV0z3A/LzU/G/4D2/6hwqhjjdoKXwR0ngkg4LUWBgDGKc9obQ0klK/9ym4+qh7MQ+nljNN8V8mygQDAgJfhhJ5GW4VM4DmvTF7COdD83//93zFKK4wBCOTuaeQVSOVbjqlLORpAdAKpgGPqMgcz1wF0zANtT7IhmbCcOjbva71KjiJkMARPwRAZk6FPQXMKoIbVASSkAOflL3/5AVIby3g7vQFMwpQRGYCcV4Yy+2tteVQjPNeV8yTBU8jUCbRHqKR0nqEQlkGEBblc0xWMMIfxjtMNOKZ3asuIkDCXe0Cp/GAFAPCMipTNU80RWvC0XaRpgkZeTRXMKQPlgbFZc/UAEE/kObMDqJsct4nUaz3QKUgmPPvaeb33DWslVxTP+AFUPnJbgJrUU4b7CikA4oFA5D2v1LyQPIUwONgApBxlCp3q5LqGpq4V/pQ/Q2Cz0ITH6psfFEv5rbqDp4lQXkHbeRSvXH/un3Ecl3N5BUEAMZAcTojkBeQerWPxJCDyPN6n6QwgA6uZ6AAijhXGeCH3TgEQz6S+vDDPCHCDAVGE7fKkO4S5BkDs/QSgVpk3EKcA2rJhUjhyPYhX0LvryQHkGO8SLP0V0nUAFVIYdgL00pe+9MiFSDPTbeHw/MCbuxcpSP0ozbXu4bVc07KF9wGkzv1YFXetXN5GOGEEhm4Rsq0nejRI9GqK9xlAGUc+ZR6LYQAESrpjEPqTmwGzGWeeRM6i3q2/eY7QNpcykrxQoazV+MDvvXaAWP2Cg00bMLRzQZItR3JNw3j1fTIK2xBsSM4Bs4ULzEDmggKo3lwexEhBFEAbpMJYOUo5yQQoT+Ra9eNiNZa7BR/oGlnJdyhE3czf9ANU6mnvT/B4dgDxeo0oKQtwPEFLI4WvZrcLTe3e8yzCs8gNQWiurCkOxuEFAGaQoQ3KlwM1DySUCXt5NG0QwiTJc0+Q920wIyBqdT5okuqtrvSl06mDOvK26tjuBp56AiQHUs9rAToF0T5/TtoqwTAzhDUns/MguZJEO5GXkGBi1LyQsuQ2AUQA5Bwg9HwG03jPBkDQeg4lzG8V9IUAYcr11SmAvLbDoL3eDCivmAkpgzb934w5xYMIPOUOPI9ywKJM+ipPYgxeSnhqFFbyzEuBsukAz+RZAmjCA5xkAtSM96wzbwbKIOd5hCX6UB/1qyOAzHudj6M4C9AlgmSGklswXPCcSqRBAhYJLg9B+rc/MDE6g7oeJLzZBsh7ZbfFlSsGiWcFb3mNOSreRNiiJHX0TM9xPY9HAgi4rp/feQOnYXQANYPcCAo8oBACeJjyBnDQD8UryxSHV+cZsWkQZctTAEIY2nkGpFdlOw+w9gR5tRbW+ljvmxNqCD+H8bwlMAFZHqQD6iQGGvTONrwz4NXf+acOUIuMDFTYkdCeSqTzPv0VNvFeA/pnY9c0uddQntcJIGJEpjGMoIEMEzyu93zCy0ikQapMdZkJtDqRAPKep+Cp+u4/GISU2aNBxNCtxjMKYSAeCRg8ZJuweCFhov3jhQigmCoIIHmW/Io3a9+VFMFx50FijqhNaYGTtM1VPdWxicR2DvBATSSWO6qn+TL6oXsQZScdjm7VWTg+ANpJ9KXS4ikISnwz4CmAVDBvIGHdADXHMwGSOE+AAKVHNwoTdgLIa5OEQONVlA2SynKcB2rIH0De9/M1IKI8bRSqADRHNz4ztpxmAuRzSzZA4ikpvslVr3ltCTTvAJAWRB1roo94Ngg8T5JN2tnYRjOvCYBcy/O4D6AS/sItgITHwpj28dDZqH+YLiJ47XcJ1P+JBwqkS4Hqt6I9pLmbhFEaialc+Q6D9pfZ4CmMOceI5UCtkDP4BIgwNHgArJzCpvuUozxAv/jFL36SiL/kJS85Pnuvrk06use94JVEU2hrdHooIBil2eiGxk32NfwFjfeuN+LiPQprygkgOmNAnkEZhS/ezf19WYBeleEZQp1EmsxvfgROXkgIA04AtU5XuG2YXjJdIp2HDhg2atmpiWC2+n9iGVzHAkOxBwAAAABJRU5ErkJggg==);
+            background-size: cover;
+        }
+
+        #identity {
+            grid-area: identity;
+        }
+
+        #miscellaneous {
+            grid-area: miscellaneous;
+        }
+
+        #points {
+            grid-area: points;
+        }
+
+        #identity, #miscellaneous, #points {
+            display: grid;
+            grid-template-rows: 0fr 1fr;
+            border: 1px solid black;
+        }
+
+        #primary-attr, #secondary-attr, #pools, #lifting {
+            display: grid;
+            grid-template-rows: 0fr 0fr;
+            border: 1px solid black;
+            flex-grow: 1;
+        }
+
+        #secondary-attr, #location, #encumbrance, #lifting {
+            margin-left: 0.05in;
+        }
+
+        #pools, #lifting {
+            margin-top: 0.05in;
+        }
+
+        #attr-col, #enc-col {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        #attr-row {
+            display: flex;
+            flex-grow: 1;
+        }
+
+        #points .field,
+        #lifting .field,
+        #primary-attr .field,
+        #secondary-attr .field,
+        #pools .field {
+            text-align: right;
+        }
+
+        #description {
+            grid-area: description;
+            display: grid;
+            grid-template:
+                "header header header"
+                "block1 block2 block3";
+            grid-template-rows: 0fr 1fr;
+            border: 1px solid black;
+        }
+
+        #description .header {
+            grid-area: header;
+        }
+
+        #description .fieldblock:nth-child(1n+3) {
+            border-left: 1px solid black;
+        }
+
+        #stats {
+            grid-area: stats;
+            display: flex;
+        }
+
+        #encumbrance {
+            flex-grow: 1;
+            grid-template:
+                "header header header header header"
+                "encmarkerh ench loadh moveh dodgeh"
+                "encmarker enc load move dodge";
+            grid-template-rows: 0fr 0fr 0fr;
+            grid-auto-rows: 0fr;
+            grid-template-columns: 0fr 2fr 1fr 0.5fr 0.5fr;
+        }
+
+        #lifting {
+            flex-grow: 1;
+            grid-template:
+                "header header"
+                "desc lift";
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 0fr 0fr;
+            grid-auto-rows: 0fr;
+        }
+
+        #lifting .header:first-child {
+            grid-area: header;
+        }
+
+        #location {
+            flex-grow: 1;
+            grid-template:
+                "header header header header"
+                "roll where penalty dr";
+            grid-template-rows: 0fr 0fr;
+            grid-auto-rows: 0fr;
+        }
+
+        #encumbrance .header:first-child,
+        #location .header:first-child {
+            grid-area: header;
+            border-bottom: 1px solid lightgray;
+        }
+
+        #encumbrance,
+        #lifting,
+        #location,
+        #reactions,
+        #conditional_modifiers,
+        #melee,
+        #ranged,
+        #advantages,
+        #skills,
+        #spells,
+        #equipment,
+        #other_equipment,
+        #notes {
+            display: grid;
+            border: 1px solid black;
+            align-content: stretch;
+        }
+
+        #reactions,
+        #conditional_modifiers,
+        #melee,
+        #ranged,
+        #advantages,
+        #skills,
+        #spells,
+        #equipment,
+        #other_equipment,
+        #notes {
+            grid-template-rows: repeat(1000, auto) 1fr;
+        }
+
+        #reactions {
+            grid-template-columns: 0fr 1fr;
+            grid-area: reactions;
+        }
+
+        #conditional_modifiers {
+            grid-template-columns: 0fr 1fr;
+            grid-area: conditional_modifiers;
+        }
+
+        #melee {
+            grid-template-columns: 1fr repeat(8, auto);
+            grid-area: melee;
+        }
+
+        #ranged {
+            grid-template-columns: 1fr repeat(10, auto);
+            grid-area: ranged;
+        }
+
+        #advantages {
+            grid-template-columns: 1fr repeat(2, auto);
+            grid-area: advantages;
+        }
+
+        #skills {
+            grid-template-columns: 1fr repeat(4, auto);
+            grid-area: skills;
+        }
+
+        #spells {
+            grid-template-columns: 1fr repeat(10, auto);
+            grid-area: spells;
+        }
+
+        #equipment {
+            grid-template-columns: auto auto 1fr repeat(6, auto);
+            grid-area: equipment;
+        }
+
+        #other_equipment {
+            grid-template-columns: auto 1fr repeat(7, auto);
+            grid-area: other_equipment;
+        }
+
+        #notes {
+            grid-template-columns: 1fr auto auto;
+            grid-area: notes;
+        }
+
+        .points {
+            text-align: right;
+            padding-left: .2em;
+            padding-right: .2em;
+            font-size: 80%;
+            align-self: center;
+        }
+
+        .label {
+            text-align: left;
+            padding-left: .2em;
+            padding-right: .2em;
+            font-size: 80%;
+            white-space: nowrap;
+            align-self: center;
+        }
+
+        .field {
+            margin-right: .2em;
+            font-weight: bold;
+        }
+
+        .field,
+        .desc,
+        .cls,
+        .college,
+        .mana,
+        .mana_maintain,
+        .time,
+        .duration,
+        .sl,
+        .rsl,
+        .qty,
+        .equipped,
+        .uses,
+        .cost,
+        .sum_cost,
+        .weight,
+        .sum_weight,
+        .pts,
+        .ref,
+        .usage,
+        .level,
+        .parry,
+        .block,
+        .damage,
+        .reach,
+        .st,
+        .acc,
+        .range,
+        .rof,
+        .shots,
+        .bulk,
+        .rcl,
+        .load,
+        .loadh,
+        .move,
+        .moveh,
+        .dodge,
+        .dodgeh,
+        .roll,
+        .where,
+        .penalty,
+        .dr,
+        .liftdesc,
+        .lift,
+        .modifier,
+        .situation {
+            padding-left: .2em;
+            padding-right: .2em;
+            border-bottom: 1px solid lightgray;
+        }
+
+        .enc,
+        .ench {
+            padding-left: 0;
+            padding-right: .2em;
+            border-bottom: 1px solid lightgray;
+        }
+
+        .encmarker,
+        .encmarkerh {
+            padding-left: .2em;
+            padding-right: 0;
+            border-bottom: 1px solid lightgray;
+        }
+
+        .load, .move, .dodge, .lift, .dr, .desc, .sl, .rsl, .pts, .ref, .usage, .level, .parry,
+        .block, .damage, .reach, .st, .acc, .range, .rof, .shots, .bulk, .rcl, .cls, .college,
+        .mana, .mana_maintain, .time, .duration, .qty, .uses, .cost, .weight, .sum_cost,
+        .sum_weight {
+            font-weight: bold;
+        }
+
+        .list_note {
+            font-weight: normal;
+        }
+
+        #encumbrance .encmarker:nth-last-child(10n+5),
+        #encumbrance .enc:nth-last-child(10n+4),
+        #encumbrance .load:nth-last-child(10n+3),
+        #encumbrance .move:nth-last-child(10n+2),
+        #encumbrance .dodge:nth-last-child(10n+1),
+        #lifting .liftdesc:nth-last-child(4n+1),
+        #lifting .lift:nth-last-child(4n+2),
+        #location .roll:nth-last-child(8n+4),
+        #location .where:nth-last-child(8n+3),
+        #location .penalty:nth-last-child(8n+2),
+        #location .dr:nth-last-child(8n+1),
+        #reactions .modifier:nth-child(even),
+        #reactions .situation:nth-child(odd),
+        #conditional_modifiers .modifier:nth-child(even),
+        #conditional_modifiers .situation:nth-child(odd),
+        #melee .desc:nth-child(even),
+        #melee .usage:nth-child(odd),
+        #melee .level:nth-child(even),
+        #melee .parry:nth-child(odd),
+        #melee .block:nth-child(even),
+        #melee .damage:nth-child(odd),
+        #melee .reach:nth-child(even),
+        #melee .st:nth-child(odd),
+        #ranged .desc:nth-child(even),
+        #ranged .usage:nth-child(odd),
+        #ranged .level:nth-child(even),
+        #ranged .acc:nth-child(odd),
+        #ranged .damage:nth-child(even),
+        #ranged .range:nth-child(odd),
+        #ranged .rof:nth-child(even),
+        #ranged .shots:nth-child(odd),
+        #ranged .bulk:nth-child(even),
+        #ranged .rcl:nth-child(odd),
+        #ranged .st:nth-child(even),
+        #advantages .desc:nth-child(even),
+        #advantages .pts:nth-child(odd),
+        #advantages .ref:nth-child(even),
+        #skills .desc:nth-child(even),
+        #skills .sl:nth-child(odd),
+        #skills .rsl:nth-child(even),
+        #skills .pts:nth-child(odd),
+        #skills .ref:nth-child(even),
+        #spells .desc:nth-child(even),
+        #spells .cls:nth-child(odd),
+        #spells .college:nth-child(even),
+        #spells .mana:nth-child(odd),
+        #spells .mana_maintain:nth-child(even),
+        #spells .time:nth-child(odd),
+        #spells .duration:nth-child(even),
+        #spells .sl:nth-child(odd),
+        #spells .rsl:nth-child(even),
+        #spells .pts:nth-child(odd),
+        #spells .ref:nth-child(even),
+        #equipment .equipped:nth-child(even),
+        #equipment .qty:nth-child(odd),
+        #equipment .desc:nth-child(even),
+        #equipment .uses:nth-child(odd),
+        #equipment .cost:nth-child(even),
+        #equipment .weight:nth-child(odd),
+        #equipment .sum_cost:nth-child(even),
+        #equipment .sum_weight:nth-child(odd),
+        #equipment .ref:nth-child(even),
+        #other_equipment .qty:nth-child(even),
+        #other_equipment .desc:nth-child(odd),
+        #other_equipment .uses:nth-child(even),
+        #other_equipment .cost:nth-child(odd),
+        #other_equipment .weight:nth-child(even),
+        #other_equipment .sum_cost:nth-child(odd),
+        #other_equipment .sum_weight:nth-child(even),
+        #other_equipment .ref:nth-child(odd),
+        #notes .desc:nth-child(even),
+        #notes .ref:nth-child(odd) {
+            background-color: #e8ffe8;
+        }
+
+        #equipment .desc,
+        #other_equipment .desc,
+        .cls,
+        .college,
+        .mana,
+        .mana_maintain,
+        .time,
+        .duration,
+        .sl,
+        .rsl,
+        .qty,
+        .uses,
+        .cost,
+        .sum_cost,
+        .weight,
+        .sum_weight,
+        .pts,
+        .ref,
+        .usage,
+        .level,
+        .parry,
+        .block,
+        .damage,
+        .reach,
+        .st,
+        .acc,
+        .range,
+        .rof,
+        .shots,
+        .bulk,
+        .rcl,
+        .load,
+        .loadh,
+        .move,
+        .moveh,
+        .dodge,
+        .dodgeh,
+        .where,
+        .penalty,
+        .dr,
+        .situation {
+            border-left: 1px solid lightgray;
+        }
+
+        .sl,
+        .rsl,
+        .qty,
+        .equipped,
+        .uses,
+        .cost,
+        .sum_cost,
+        .weight,
+        .sum_weight,
+        .pts,
+        .ref,
+        .level,
+        .parry,
+        .block,
+        .reach,
+        .st,
+        .acc,
+        .rof,
+        .shots,
+        .bulk,
+        .rcl,
+        .load,
+        .move,
+        .dodge,
+        .where,
+        .penalty,
+        .dr,
+        .lift,
+        .modifier {
+            text-align: right;
+        }
+
+        .equipped,
+        .roll {
+            text-align: center;
+        }
+
+        .liftdesc,
+        .where {
+            text-align: left;
+        }
+
+        .encmarker,
+        .encmarkerh,
+        .enc,
+        .ench,
+        .load,
+        .loadh,
+        .move,
+        .moveh,
+        .dodge,
+        .dodgeh,
+        .roll,
+        .where,
+        .penalty,
+        .dr,
+        .liftdesc,
+        .lift,
+        .modifier {
+            white-space: nowrap;
+        }
+
+        #lifting .field,
+        .noedit {
+            white-space: nowrap;
+            border: none;
+        }
+
+        .header,
+        #reactions .header,
+        #conditional_modifiers .header,
+        #melee .header,
+        #ranged .header,
+        #equipment .header,
+        #other_equipment .header {
+            background-color: black;
+            border-bottom: 1px solid black;
+            color: white;
+            text-align: center;
+            font-size: 80%;
+        }
+
+        #location .header:nth-last-child(8n+4),
+        #location .header:nth-last-child(8n+3),
+        #location .header:nth-last-child(8n+2),
+        #location .header:nth-last-child(8n+1) {
+            background-color: black;
+        }
+
+        #encumbrance > div:nth-last-child(-n+5),
+        #lifting > div:nth-last-child(-n+2),
+        #location > div:nth-last-child(-n+4) {
+            border-bottom: none;
+        }
+
+        #reactions > div:nth-last-child(-n+3),
+        #conditional_modifiers > div:nth-last-child(-n+3),
+        #melee > div:nth-last-child(-n+9),
+        #ranged > div:nth-last-child(-n+11),
+        #advantages > div:nth-last-child(-n+3),
+        #skills > div:nth-last-child(-n+5),
+        #spells > div:nth-last-child(-n+11),
+        #equipment > div:nth-last-child(-n+9),
+        #other_equipment > div:nth-last-child(-n+9),
+        #notes > div:nth-last-child(-n+3) {
+            border-bottom: none;
+            grid-row: 1001;
+        }
+
+        .indent1 {
+            padding-left: 1em;
+        }
+
+        .indent2 {
+            padding-left: 2em;
+        }
+
+        .indent3 {
+            padding-left: 3em;
+        }
+
+        .indent4 {
+            padding-left: 4em;
+        }
+
+        .indent5 {
+            padding-left: 5em;
+        }
+
+        .indent6 {
+            padding-left: 6em;
+        }
+
+        .indent7 {
+            padding-left: 7em;
+        }
+
+        .indent8 {
+            padding-left: 8em;
+        }
+
+        .indent9 {
+            padding-left: 9em;
+        }
+
+        .satisfiedN {
+            color: red;
+        }
+
+        #encumbrance .current:nth-last-child(10n+5),
+        #encumbrance .current:nth-last-child(10n+4),
+        #encumbrance .current:nth-last-child(10n+3),
+        #encumbrance .current:nth-last-child(10n+2),
+        #encumbrance .current:nth-last-child(10n+1),
+        .current {
+            background-color: lightgoldenrodyellow;
+        }
+
+        .list_note {
+            font-size: 80%;
+        }
+
+        .encmarker.current:after {
+            content: '•';
+        }
+
+        .enc0:after {
+            content: 'None (0)';
+        }
+
+        .enc1:after {
+            content: 'Light (1)';
+        }
+
+        .enc2:after {
+            content: 'Medium (2)';
+        }
+
+        .enc3:after {
+            content: 'Heavy (3)';
+        }
+
+        .enc4:after {
+            content: 'X-heavy (4)';
+        }
+    </style>
+</head>
+
+<body>
+    <div id="sheet">
+        <div id="personal">
+            <div id="portrait">
+                <div class="header">Portrait</div>
+                <div class="portrait"></div>
+            </div>
+            <div id="identity">
+                <div class="header">Identity</div>
+                <div class="fieldblock">
+                    <div class="label">Name:</div>
+                    <div class="field">Alicia Whethnook</div>
+                    <div class="label">Title:</div>
+                    <div class="field"></div>
+                    <div class="label">Organization:</div>
+                    <div class="field"></div>
+                </div>
+            </div>
+            <div id="miscellaneous">
+                <div class="header">Miscellaneous</div>
+                <div class="fieldblock">
+                    <div class="label">Created:</div>
+                    <div class="field">Jan 8, 2021 at 9:01 AM</div>
+                    <div class="label">Modified:</div>
+                    <div class="field">Jan 8, 2021 at 9:01 AM</div>
+                    <div class="label">Player:</div>
+                    <div class="field">nux</div>
+                </div>
+            </div>
+            <div id="description">
+                <div class="header">Description</div>
+                <div class="fieldblock">
+                    <div class="label">Gender:</div>
+                    <div class="field">Female</div>
+                    <div class="label">Age:</div>
+                    <div class="field">26</div>
+                    <div class="label">Birthday:</div>
+                    <div class="field">June 1</div>
+                    <div class="label">Religion:</div>
+                    <div class="field"></div>
+                </div>
+                <div class="fieldblock">
+                    <div class="label">Height:</div>
+                    <div class="field">174 cm</div>
+                    <div class="label">Weight:</div>
+                    <div class="field">52 kg</div>
+                    <div class="label">Size:</div>
+                    <div class="field">+0</div>
+                    <div class="label">TL:</div>
+                    <div class="field">3</div>
+                </div>
+                <div class="fieldblock">
+                    <div class="label">Hair:</div>
+                    <div class="field">Hazel</div>
+                    <div class="label">Eyes:</div>
+                    <div class="field">Brown</div>
+                    <div class="label">Skin:</div>
+                    <div class="field">Pale</div>
+                    <div class="label">Hand:</div>
+                    <div class="field">Any</div>
+                </div>
+            </div>
+            <div id="points">
+                <div class="header">200 Points</div>
+                <div class="fieldblock">
+                    <div class="field">0</div>
+                    <div class="label">Unspent</div>
+                    <div class="field noedit">0</div>
+                    <div class="label">Race</div>
+                    <div class="field noedit">110</div>
+                    <div class="label">Attributes</div>
+                    <div class="field noedit">93</div>
+                    <div class="label">Advantages</div>
+                    <div class="field noedit">-45</div>
+                    <div class="label">Disadvantages</div>
+                    <div class="field noedit">-5</div>
+                    <div class="label">Quirks</div>
+                    <div class="field noedit">47</div>
+                    <div class="label">Skills</div>
+                    <div class="field noedit">0</div>
+                    <div class="label">Spells</div>
+                </div>
+            </div>
+        </div>
+        <div id="stats">
+            <div id="attr-col">
+                <div id="attr-row">
+                    <div id="primary-attr">
+                        <div class="header">Primary Attributes</div>
+                        <div class="fieldblock3">
+                            
+                            <div class="points">[0]</div>
+                            <div class="field">10</div>
+                            <div class="label">Strength (ST)</div>
+                            
+                            <div class="points">[40]</div>
+                            <div class="field">12</div>
+                            <div class="label">Dexterity (DX)</div>
+                            
+                            <div class="points">[40]</div>
+                            <div class="field">12</div>
+                            <div class="label">Intelligence (IQ)</div>
+                            
+                            <div class="points">[20]</div>
+                            <div class="field">12</div>
+                            <div class="label">Health (HT)</div>
+                            
+                            <hr>
+                            <div class="points"></div>
+                            <div class="field noedit">1d-2</div>
+                            <div class="label">Basic Thrust</div>
+                            <div class="points"></div>
+                            <div class="field noedit">1d</div>
+                            <div class="label">Basic Swing</div>
+                        </div>
+                    </div>
+                    <div id="secondary-attr">
+                        <div class="header">Secondary Attributes</div>
+                        <div class="fieldblock3">
+                            
+                            <div class="points">[5]</div>
+                            <div class="field">13</div>
+                            <div class="label">Will</div>
+                            
+                            <div class="points">[0]</div>
+                            <div class="field">15</div>
+                            <div class="label">Fright Check</div>
+                            
+                            <div class="points">[5]</div>
+                            <div class="field">13</div>
+                            <div class="label">Perception (Per)</div>
+                            
+                            <div class="points">[0]</div>
+                            <div class="field">13</div>
+                            <div class="label">Vision</div>
+                            
+                            <div class="points">[0]</div>
+                            <div class="field">13</div>
+                            <div class="label">Hearing</div>
+                            
+                            <div class="points">[0]</div>
+                            <div class="field">13</div>
+                            <div class="label">Taste &amp; Smell</div>
+                            
+                            <div class="points">[0]</div>
+                            <div class="field">13</div>
+                            <div class="label">Touch</div>
+                            
+                            <div class="points">[0]</div>
+                            <div class="field">6</div>
+                            <div class="label">Basic Speed</div>
+                            
+                            <div class="points">[0]</div>
+                            <div class="field">6</div>
+                            <div class="label">Basic Move</div>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div id="pools">
+                    <div class="header">Point Pools</div>
+                    <div class="fieldblock5">
+                        
+                        <div class="points">[0]</div>
+                        <div class="field">12</div>
+                        <div class="label">of</div>
+                        <div class="field">12</div>
+                        <div class="label">Fatigue Points (FP)</div>
+                        
+                        <div class="points">[0]</div>
+                        <div class="field">10</div>
+                        <div class="label">of</div>
+                        <div class="field">10</div>
+                        <div class="label">Hit Points (HP)</div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div id="location">
+                <div class="header">Hit Location</div>
+                <div class="roll header">Roll</div>
+                <div class="where header">Where</div>
+                <div class="penalty header">Penalty</div>
+                <div class="dr header">DR</div>
+                
+                <div class="roll">-</div>
+                <div class="where">Eyes</div>
+                <div class="penalty">-9</div>
+                <div class="dr">0</div>
+                
+                <div class="roll">3-4</div>
+                <div class="where">Skull</div>
+                <div class="penalty">-7</div>
+                <div class="dr">2</div>
+                
+                <div class="roll">5</div>
+                <div class="where">Face</div>
+                <div class="penalty">-5</div>
+                <div class="dr">0</div>
+                
+                <div class="roll">6-7</div>
+                <div class="where">Right Leg</div>
+                <div class="penalty">-2</div>
+                <div class="dr">0</div>
+                
+                <div class="roll">8</div>
+                <div class="where">Right Arm</div>
+                <div class="penalty">-2</div>
+                <div class="dr">0</div>
+                
+                <div class="roll">9-10</div>
+                <div class="where">Torso</div>
+                <div class="penalty">0</div>
+                <div class="dr">2</div>
+                
+                <div class="roll">11</div>
+                <div class="where">Groin</div>
+                <div class="penalty">-3</div>
+                <div class="dr">0</div>
+                
+                <div class="roll">12</div>
+                <div class="where">Left Arm</div>
+                <div class="penalty">-2</div>
+                <div class="dr">0</div>
+                
+                <div class="roll">13-14</div>
+                <div class="where">Left Leg</div>
+                <div class="penalty">-2</div>
+                <div class="dr">0</div>
+                
+                <div class="roll">15</div>
+                <div class="where">Hand</div>
+                <div class="penalty">-4</div>
+                <div class="dr">0</div>
+                
+                <div class="roll">16</div>
+                <div class="where">Foot</div>
+                <div class="penalty">-4</div>
+                <div class="dr">0</div>
+                
+                <div class="roll">17-18</div>
+                <div class="where">Neck</div>
+                <div class="penalty">-5</div>
+                <div class="dr">0</div>
+                
+                <div class="roll">-</div>
+                <div class="where">Vitals</div>
+                <div class="penalty">-3</div>
+                <div class="dr">2</div>
+                
+            </div>
+            <div id="enc-col">
+                <div id="encumbrance">
+                    <div class="header">Encumbrance, Move &amp; Dodge</div>
+                    <div class="encmarkerh header"></div>
+                    <div class="ench header">Level</div>
+                    <div class="loadh header">Max Load</div>
+                    <div class="moveh header">Move</div>
+                    <div class="dodgeh header">Dodge</div>
+                    
+                    <div class="encmarker "></div>
+                    <div class="enc  enc0"></div>
+                    <div class="load ">10 kg</div>
+                    <div class="move ">6</div>
+                    <div class="dodge ">10</div>
+                    
+                    <div class="encmarker "></div>
+                    <div class="enc  enc1"></div>
+                    <div class="load ">20 kg</div>
+                    <div class="move ">4</div>
+                    <div class="dodge ">9</div>
+                    
+                    <div class="encmarker current"></div>
+                    <div class="enc current enc2"></div>
+                    <div class="load current">30 kg</div>
+                    <div class="move current">3</div>
+                    <div class="dodge current">8</div>
+                    
+                    <div class="encmarker "></div>
+                    <div class="enc  enc3"></div>
+                    <div class="load ">60 kg</div>
+                    <div class="move ">2</div>
+                    <div class="dodge ">7</div>
+                    
+                    <div class="encmarker "></div>
+                    <div class="enc  enc4"></div>
+                    <div class="load ">100 kg</div>
+                    <div class="move ">1</div>
+                    <div class="dodge ">6</div>
+                    
+                </div>
+                <div id="lifting">
+                    <div class="header">Lifting &amp; Moving Things</div>
+                    <div class="lift">10 kg</div>
+                    <div class="liftdesc">Basic Lift</div>
+                    <div class="lift">20 kg</div>
+                    <div class="liftdesc">One-Handed Lift</div>
+                    <div class="lift">80 kg</div>
+                    <div class="liftdesc">Two-Handed Lift</div>
+                    <div class="lift">120 kg</div>
+                    <div class="liftdesc">Shove &amp; Knock Over</div>
+                    <div class="lift">240 kg</div>
+                    <div class="liftdesc">Running Shove &amp; Knock Over</div>
+                    <div class="lift">150 kg</div>
+                    <div class="liftdesc">Carry on Back</div>
+                    <div class="lift">500 kg</div>
+                    <div class="liftdesc">Shift Slightly</div>
+                </div>
+            </div>
+        </div>
+        <div id="reactions">
+            <div class="modifier header">Modifier</div>
+            <div class="situation header">Reaction</div>
+            <div></div>
+
+            
+            <div class="modifier">-2</div>
+            <div class="situation">from experienced NPCs</div>
+            <div></div>
+            
+            <div class="modifier">-1</div>
+            <div class="situation">from past victims and anyone with Empathy</div>
+            <div></div>
+            
+            <div class="modifier">+2</div>
+            <div class="situation">from young or naive individuals who believe you are as good as you say you are</div>
+            <div></div>
+            
+            <div class="modifier">-3</div>
+            <div class="situation">from others when your Selfishness surfaces</div>
+            <div></div>
+            
+            <div class="modifier">+1</div>
+            <div class="situation">from others</div>
+            <div></div>
+            
+        </div>
+        <div id="conditional_modifiers">
+            <div class="modifier header">Modifier</div>
+            <div class="situation header">Condition</div>
+            <div></div>
+
+            
+            <div class="modifier">+1</div>
+            <div class="situation">to initiative rolls for your side (+2 if you are the leader)</div>
+            <div></div>
+            
+            <div class="modifier">+1</div>
+            <div class="situation">to all HT rolls to stay conscious, avoid death, resist disease, or resist poison</div>
+            <div></div>
+            
+            <div class="modifier">+6</div>
+            <div class="situation">on all IQ rolls to wake up or to recover from surprise or mental stun</div>
+            <div></div>
+            
+        </div>
+        <div id="melee">
+            <div class="desc header">Melee Weapons</div>
+            <div class="usage header">Usage</div>
+            <div class="level header">Lvl</div>
+            <div class="parry header">Parry</div>
+            <div class="block header">Block</div>
+            <div class="damage header">Damage</div>
+            <div class="reach header">Reach</div>
+            <div class="st header">ST</div>
+            <div></div>
+
+            
+            <div class="desc">Dagger
+                <div class="list_note"></div>
+            </div>
+            <div class="usage">Thrust</div>
+            <div class="level">18</div>
+            <div class="parry">12</div>
+            <div class="block">No</div>
+            <div class="damage">1d-3 imp</div>
+            <div class="reach">C</div>
+            <div class="st">5</div>
+            <div></div>
+            
+            <div class="desc">Hatchet
+                <div class="list_note"></div>
+            </div>
+            <div class="usage">Swung</div>
+            <div class="level">7</div>
+            <div class="parry">7</div>
+            <div class="block">No</div>
+            <div class="damage">1d cut</div>
+            <div class="reach">1</div>
+            <div class="st">8</div>
+            <div></div>
+            
+            <div class="desc">Large Knife
+                <div class="list_note"></div>
+            </div>
+            <div class="usage">Swung</div>
+            <div class="level">18</div>
+            <div class="parry">12</div>
+            <div class="block">No</div>
+            <div class="damage">1d-2 cut</div>
+            <div class="reach">C,1</div>
+            <div class="st">6</div>
+            <div></div>
+            
+            <div class="desc">Large Knife
+                <div class="list_note"></div>
+            </div>
+            <div class="usage">Thrust</div>
+            <div class="level">18</div>
+            <div class="parry">12</div>
+            <div class="block">No</div>
+            <div class="damage">1d-2 imp</div>
+            <div class="reach">C</div>
+            <div class="st">6</div>
+            <div></div>
+            
+            <div class="desc">Long Knife
+                <div class="list_note"></div>
+            </div>
+            <div class="usage">Swung</div>
+            <div class="level">18</div>
+            <div class="parry">13</div>
+            <div class="block">No</div>
+            <div class="damage">1d-1 cut</div>
+            <div class="reach">C,1</div>
+            <div class="st">7</div>
+            <div></div>
+            
+            <div class="desc">Long Knife
+                <div class="list_note"></div>
+            </div>
+            <div class="usage">Thrust</div>
+            <div class="level">18</div>
+            <div class="parry">13</div>
+            <div class="block">No</div>
+            <div class="damage">1d-2 imp</div>
+            <div class="reach">C,1</div>
+            <div class="st">7</div>
+            <div></div>
+            
+            <div class="desc">Natural Attacks
+                <div class="list_note"></div>
+            </div>
+            <div class="usage">Bite</div>
+            <div class="level">12</div>
+            <div class="parry">No</div>
+            <div class="block">No</div>
+            <div class="damage">1d-3 cr</div>
+            <div class="reach">C</div>
+            <div class="st"></div>
+            <div></div>
+            
+            <div class="desc">Natural Attacks
+                <div class="list_note"></div>
+            </div>
+            <div class="usage">Kick</div>
+            <div class="level">10</div>
+            <div class="parry">No</div>
+            <div class="block"></div>
+            <div class="damage">1d-2 cr</div>
+            <div class="reach">C,1</div>
+            <div class="st"></div>
+            <div></div>
+            
+            <div class="desc">Natural Attacks
+                <div class="list_note"></div>
+            </div>
+            <div class="usage">Punch</div>
+            <div class="level">12</div>
+            <div class="parry">10</div>
+            <div class="block"></div>
+            <div class="damage">1d-3 cr</div>
+            <div class="reach">C</div>
+            <div class="st"></div>
+            <div></div>
+            
+        </div>
+        <div id="ranged">
+            <div class="desc header">Ranged Weapons</div>
+            <div class="usage header">Usage</div>
+            <div class="level header">Lvl</div>
+            <div class="acc header">Acc</div>
+            <div class="damage header">Damage</div>
+            <div class="range header">Range</div>
+            <div class="rof header">RoF</div>
+            <div class="shots header">Shots</div>
+            <div class="bulk header">Bulk</div>
+            <div class="rcl header">Rcl</div>
+            <div class="st header">ST</div>
+
+            
+            <div class="desc">Dagger
+                <div class="list_note"></div>
+            </div>
+            <div class="usage">Thrown</div>
+            <div class="level">8</div>
+            <div class="acc">0</div>
+            <div class="damage">1d-3 imp</div>
+            <div class="range">x0.5/x1</div>
+            <div class="rof">1</div>
+            <div class="shots">T(1)</div>
+            <div class="bulk">-1</div>
+            <div class="rcl"></div>
+            <div class="st">5</div>
+            
+            <div class="desc">Hatchet
+                <div class="list_note"></div>
+            </div>
+            <div class="usage">Thrown</div>
+            <div class="level">8</div>
+            <div class="acc">1</div>
+            <div class="damage">1d cut</div>
+            <div class="range">x1.5/x2.5</div>
+            <div class="rof">1</div>
+            <div class="shots">T(1)</div>
+            <div class="bulk">-2</div>
+            <div class="rcl"></div>
+            <div class="st">8</div>
+            
+            <div class="desc">Large Knife
+                <div class="list_note"></div>
+            </div>
+            <div class="usage">Thrown</div>
+            <div class="level">8</div>
+            <div class="acc">0</div>
+            <div class="damage">1d-2 imp</div>
+            <div class="range">x0.8/x1.5</div>
+            <div class="rof">1</div>
+            <div class="shots">T(1)</div>
+            <div class="bulk">-2</div>
+            <div class="rcl"></div>
+            <div class="st">6</div>
+            
+        </div>
+        <div id="advantages">
+            <div class="desc header">Advantages, Disadvantages, Perks &amp; Quirks</div>
+            <div class="pts header">Pts</div>
+            <div class="ref header"><i class="fas fa-bookmark"></i></div>
+
+            
+            <div class="desc indent0 satisfiedY">Natural Attacks
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="pts satisfiedY">0</div>
+            <div class="ref satisfiedY">B271</div>
+            
+            <div class="desc indent0 satisfiedY">Language: Human
+                <div class="list_note satisfiedY">Native; Spoken (Native); Written (Native)</div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="pts satisfiedY">0</div>
+            <div class="ref satisfiedY">B24</div>
+            
+            <div class="desc indent0 satisfiedY">Advantages
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="pts satisfiedY">93</div>
+            <div class="ref satisfiedY"></div>
+            
+            <div class="desc indent1 satisfiedY">Ambidexterity
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="pts satisfiedY">5</div>
+            <div class="ref satisfiedY">B39</div>
+            
+            <div class="desc indent1 satisfiedY">Appearance
+                <div class="list_note satisfiedY">Attractive</div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="pts satisfiedY">4</div>
+            <div class="ref satisfiedY">B21</div>
+            
+            <div class="desc indent1 satisfiedY">Combat Reflexes
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY">Never freeze</div>
+            </div>
+            <div class="pts satisfiedY">15</div>
+            <div class="ref satisfiedY">B43</div>
+            
+            <div class="desc indent1 satisfiedY">Convincing Nod
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY">Non-Verbal Fast-Talk</div>
+            </div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">PU2:15</div>
+            
+            <div class="desc indent1 satisfiedY">Fearsome Stare
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY">Non-Verbal Intimidation</div>
+            </div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">PU2:15</div>
+            
+            <div class="desc indent1 satisfiedY">Fit
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY">Recover FP at twice the normal rate (but not FP spent for spells or psi powers)</div>
+            </div>
+            <div class="pts satisfiedY">5</div>
+            <div class="ref satisfiedY">B55</div>
+            
+            <div class="desc indent1 satisfiedY">Flexibility
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY">May ignore up to -3 in penalties for close quarters</div>
+            </div>
+            <div class="pts satisfiedY">5</div>
+            <div class="ref satisfiedY">B56</div>
+            
+            <div class="desc indent1 satisfiedY">Honest Face
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">PU2:4</div>
+            
+            <div class="desc indent1 satisfiedY">Less Sleep 2
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY">Require 1 hour/level less sleep for a full night's rest (max 4)</div>
+            </div>
+            <div class="pts satisfiedY">4</div>
+            <div class="ref satisfiedY">B65</div>
+            
+            <div class="desc indent1 satisfiedY">Night Vision 2
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="pts satisfiedY">2</div>
+            <div class="ref satisfiedY">B71</div>
+            
+            <div class="desc indent1 satisfiedY">Talent (Impersonator) 2
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="pts satisfiedY">10</div>
+            <div class="ref satisfiedY">PU3:11</div>
+            
+            <div class="desc indent1 satisfiedY">Talent (Operator) 4
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="pts satisfiedY">40</div>
+            <div class="ref satisfiedY">B89</div>
+            
+            <div class="desc indent0 satisfiedY">Disadvantages
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="pts satisfiedY">-50</div>
+            <div class="ref satisfiedY"></div>
+            
+            <div class="desc indent1 satisfiedY">Broad-Minded
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="pts satisfiedY">-1</div>
+            <div class="ref satisfiedY">PU6:17</div>
+            
+            <div class="desc indent1 satisfiedY">Callous
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY">+1 to Interrogation and Intimidation rolls when you use threats or torture</div>
+            </div>
+            <div class="pts satisfiedY">-5</div>
+            <div class="ref satisfiedY">B125</div>
+            
+            <div class="desc indent1 satisfiedY">Congenial
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="pts satisfiedY">-1</div>
+            <div class="ref satisfiedY">PU6:17</div>
+            
+            <div class="desc indent1 satisfiedY">Dependant (Minell, Daughter, new born)
+                <div class="list_note satisfiedY">Point total (0 or fewer points); Appears quite rarely (6-); Loved one</div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="pts satisfiedY">-15</div>
+            <div class="ref satisfiedY">B131</div>
+            
+            <div class="desc indent1 satisfiedY">Nosy
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="pts satisfiedY">-1</div>
+            <div class="ref satisfiedY">PU6:20</div>
+            
+            <div class="desc indent1 satisfiedY">Overconfidence
+                <div class="list_note satisfiedY">CR: 12 (Resist Quite Often)</div>
+                <div class="list_note satisfiedY">You must make a self-control roll any time the GM feels you show an unreasonable degree of caution. If you fail, you must go ahead as though you were able to handle the situation!</div>
+            </div>
+            <div class="pts satisfiedY">-5</div>
+            <div class="ref satisfiedY">B148</div>
+            
+            <div class="desc indent1 satisfiedY">Restless Sleeper
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="pts satisfiedY">-1</div>
+            <div class="ref satisfiedY">PU6:24</div>
+            
+            <div class="desc indent1 satisfiedY">Secret (Was Assassin/Operative)
+                <div class="list_note satisfiedY">Imprisonment; Appears quite rarely (6 or less)</div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="pts satisfiedY">-10</div>
+            <div class="ref satisfiedY">B152</div>
+            
+            <div class="desc indent1 satisfiedY">Selfish
+                <div class="list_note satisfiedY">CR: 12 (Resist Quite Often)</div>
+                <div class="list_note satisfiedY">Make a self-control roll whenever you experience a clear social slight or &#8220;snub.&#8221; On a failure, you lash out at the offending party just as if you had Bad Temper.</div>
+            </div>
+            <div class="pts satisfiedY">-5</div>
+            <div class="ref satisfiedY">B153</div>
+            
+            <div class="desc indent1 satisfiedY">Slow Riser
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY">For one hour after you awaken from any sleep longer than a one-hour nap, you have -2 on all self-control rolls and -1 to IQ and IQ-based skills. Furthermore, whenever the GM assesses attribute penalties for missed sleep, you suffer an extra -1.</div>
+            </div>
+            <div class="pts satisfiedY">-5</div>
+            <div class="ref satisfiedY">B155</div>
+            
+            <div class="desc indent1 satisfiedY">Suspicious
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="pts satisfiedY">-1</div>
+            <div class="ref satisfiedY">PU6:20</div>
+            
+        </div>
+        <div id="skills">
+            <div class="desc header">Skills</div>
+            <div class="sl header">SL</div>
+            <div class="rsl header">RSL</div>
+            <div class="pts header">Pts</div>
+            <div class="ref header"><i class="fas fa-bookmark"></i></div>
+
+            
+            <div class="desc indent0 satisfiedY">Acrobatics
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">10</div>
+            <div class="rsl satisfiedY">DX-2</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B174</div>
+            
+            <div class="desc indent0 satisfiedY">Acting
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">17</div>
+            <div class="rsl satisfiedY">IQ+5</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B174</div>
+            
+            <div class="desc indent0 satisfiedY">Body Language
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">14</div>
+            <div class="rsl satisfiedY">Per+1</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B181</div>
+            
+            <div class="desc indent0 satisfiedY">Brawling
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">12</div>
+            <div class="rsl satisfiedY">DX+0</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B182</div>
+            
+            <div class="desc indent0 satisfiedY">Carousing
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">12</div>
+            <div class="rsl satisfiedY">HT+0</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B183</div>
+            
+            <div class="desc indent0 satisfiedY">Climbing
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">12</div>
+            <div class="rsl satisfiedY">DX+2</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B183</div>
+            
+            <div class="desc indent0 satisfiedY">Disguise/TL3 (Human)
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">13</div>
+            <div class="rsl satisfiedY">IQ+1</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B187</div>
+            
+            <div class="desc indent0 satisfiedY">Erotic Art
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">14</div>
+            <div class="rsl satisfiedY">DX+2</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B192</div>
+            
+            <div class="desc indent0 satisfiedY">Escape
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">13</div>
+            <div class="rsl satisfiedY">DX+1</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B192</div>
+            
+            <div class="desc indent0 satisfiedY">Fast-Draw (Knife)
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">13</div>
+            <div class="rsl satisfiedY">DX+1</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B194</div>
+            
+            <div class="desc indent0 satisfiedY">Fast-Talk
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">17</div>
+            <div class="rsl satisfiedY">IQ+5</div>
+            <div class="pts satisfiedY">4</div>
+            <div class="ref satisfiedY">B195</div>
+            
+            <div class="desc indent0 satisfiedY">Filch
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">11</div>
+            <div class="rsl satisfiedY">DX-1</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B195</div>
+            
+            <div class="desc indent0 satisfiedY">First Aid/TL3
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">12</div>
+            <div class="rsl satisfiedY">IQ+0</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B195</div>
+            
+            <div class="desc indent0 satisfiedY">Holdout
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">15</div>
+            <div class="rsl satisfiedY">IQ+3</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B200</div>
+            
+            <div class="desc indent0 satisfiedY">Housekeeping
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">12</div>
+            <div class="rsl satisfiedY">IQ+0</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B200</div>
+            
+            <div class="desc indent0 satisfiedY">Interrogation
+                <div class="list_note satisfiedY">Default: Intimidation - 3</div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">15</div>
+            <div class="rsl satisfiedY">IQ+3</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B202</div>
+            
+            <div class="desc indent0 satisfiedY">Intimidation
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">17</div>
+            <div class="rsl satisfiedY">Will+4</div>
+            <div class="pts satisfiedY">2</div>
+            <div class="ref satisfiedY">B202</div>
+            
+            <div class="desc indent0 satisfiedY">Judo
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY">Allows parrying two different attacks per turn, one with each hand.</div>
+            </div>
+            <div class="sl satisfiedY">14</div>
+            <div class="rsl satisfiedY">DX+4</div>
+            <div class="pts satisfiedY">4</div>
+            <div class="ref satisfiedY">B203</div>
+            
+            <div class="desc indent0 satisfiedY">Jumping
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">12</div>
+            <div class="rsl satisfiedY">DX+0</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B203</div>
+            
+            <div class="desc indent0 satisfiedY">Knife
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">18</div>
+            <div class="rsl satisfiedY">DX+6</div>
+            <div class="pts satisfiedY">4</div>
+            <div class="ref satisfiedY">B208</div>
+            
+            <div class="desc indent0 satisfiedY">Leatherworking
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">12</div>
+            <div class="rsl satisfiedY">DX+0</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B205</div>
+            
+            <div class="desc indent0 satisfiedY">Lockpicking/TL3
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">11</div>
+            <div class="rsl satisfiedY">IQ-1</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B206</div>
+            
+            <div class="desc indent0 satisfiedY">Merchant
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">11</div>
+            <div class="rsl satisfiedY">IQ-1</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B209</div>
+            
+            <div class="desc indent0 satisfiedY">Mimicry (Speech)
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">12</div>
+            <div class="rsl satisfiedY">IQ+0</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B210</div>
+            
+            <div class="desc indent0 satisfiedY">Observation
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">16</div>
+            <div class="rsl satisfiedY">Per+3</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B211</div>
+            
+            <div class="desc indent0 satisfiedY">Poisons/TL3
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">14</div>
+            <div class="rsl satisfiedY">IQ+2</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B214</div>
+            
+            <div class="desc indent0 satisfiedY">Savoir-Faire (High Society)
+                <div class="list_note satisfiedY">Default: Savoir-Faire (Servant) - 2</div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">12</div>
+            <div class="rsl satisfiedY">IQ+0</div>
+            <div class="pts satisfiedY">0</div>
+            <div class="ref satisfiedY">B218</div>
+            
+            <div class="desc indent0 satisfiedY">Savoir-Faire (Servant)
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">14</div>
+            <div class="rsl satisfiedY">IQ+2</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B218</div>
+            
+            <div class="desc indent0 satisfiedY">Sewing/TL3
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">12</div>
+            <div class="rsl satisfiedY">DX+0</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B219</div>
+            
+            <div class="desc indent0 satisfiedY">Sex Appeal
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">16</div>
+            <div class="rsl satisfiedY">HT+4</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B219</div>
+            
+            <div class="desc indent0 satisfiedY">Shadowing
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">11</div>
+            <div class="rsl satisfiedY">IQ-1</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B219</div>
+            
+            <div class="desc indent0 satisfiedY">Stealth
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">13</div>
+            <div class="rsl satisfiedY">DX+3</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B222</div>
+            
+            <div class="desc indent0 satisfiedY">Streetwise
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">17</div>
+            <div class="rsl satisfiedY">IQ+5</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B223</div>
+            
+            <div class="desc indent0 satisfiedY">Survival (Woodlands)
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">12</div>
+            <div class="rsl satisfiedY">Per-1</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B223</div>
+            
+            <div class="desc indent0 satisfiedY">Swimming
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">8</div>
+            <div class="rsl satisfiedY">HT+0</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B224</div>
+            
+            <div class="desc indent0 satisfiedY">Tactics
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">10</div>
+            <div class="rsl satisfiedY">IQ-2</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B224</div>
+            
+            <div class="desc indent0 satisfiedY">Throwing
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">11</div>
+            <div class="rsl satisfiedY">DX-1</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B226</div>
+            
+            <div class="desc indent0 satisfiedY">Urban Survival
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="sl satisfiedY">12</div>
+            <div class="rsl satisfiedY">Per-1</div>
+            <div class="pts satisfiedY">1</div>
+            <div class="ref satisfiedY">B228</div>
+            
+        </div>
+        <div id="spells">
+            <div class="desc header">Spells</div>
+            <div class="cls header">Class</div>
+            <div class="college header">College</div>
+            <div class="mana header">Cost</div>
+            <div class="mana_maintain header">Maintain</div>
+            <div class="time header">Time</div>
+            <div class="duration header">Duration</div>
+            <div class="sl header">SL</div>
+            <div class="rsl header">RSL</div>
+            <div class="pts header">Pts</div>
+            <div class="ref header"><i class="fas fa-bookmark"></i></div>
+
+            
+        </div>
+        <div id="equipment">
+            <div class="equipped header"><i class="fas fa-check-circle"></i></div>
+            <div class="qty header"><i class="fab fa-slack-hash"></i></div>
+            <div class="desc header">Equipment (28.125 kg; $735)</div>
+            <div class="uses header">Uses</div>
+            <div class="cost header">$</div>
+            <div class="weight header"><i class="fas fa-weight-hanging"></i></div>
+            <div class="sum_cost header">∑ $</div>
+            <div class="sum_weight header">∑ <i class="fas fa-weight-hanging"></i></div>
+            <div class="ref header"><i class="fas fa-bookmark"></i></div>
+
+            
+            <div class="equipped satisfiedY"><i class="fas fa-check-circle"></i></div>
+            <div class="qty satisfiedY">4</div>
+            <div class="desc indent0 satisfiedY">Dagger
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="uses satisfiedY">0</div>
+            <div class="cost satisfiedY">20</div>
+            <div class="weight satisfiedY">0.125 kg</div>
+            <div class="sum_cost satisfiedY">80</div>
+            <div class="sum_weight satisfiedY">0.5 kg</div>
+            <div class="ref satisfiedY">LT56</div>
+            
+            <div class="equipped satisfiedY"><i class="fas fa-check-circle"></i></div>
+            <div class="qty satisfiedY">1</div>
+            <div class="desc indent0 satisfiedY">Large Knife
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="uses satisfiedY">0</div>
+            <div class="cost satisfiedY">40</div>
+            <div class="weight satisfiedY">0.5 kg</div>
+            <div class="sum_cost satisfiedY">40</div>
+            <div class="sum_weight satisfiedY">0.5 kg</div>
+            <div class="ref satisfiedY">LT58</div>
+            
+            <div class="equipped satisfiedY"><i class="fas fa-check-circle"></i></div>
+            <div class="qty satisfiedY">1</div>
+            <div class="desc indent0 satisfiedY">Layered Leather, Light Chest Armor
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY">Don: 20 secs; Holdout: -1; Reaction Pen.-1; Flexible and susceptible to blunt trauma (p. B379)</div>
+            </div>
+            <div class="uses satisfiedY">0</div>
+            <div class="cost satisfiedY">90</div>
+            <div class="weight satisfiedY">5.65 kg</div>
+            <div class="sum_cost satisfiedY">90</div>
+            <div class="sum_weight satisfiedY">5.65 kg</div>
+            <div class="ref satisfiedY">LTIA5</div>
+            
+            <div class="equipped satisfiedY"><i class="fas fa-check-circle"></i></div>
+            <div class="qty satisfiedY">1</div>
+            <div class="desc indent0 satisfiedY">Long Knife
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="uses satisfiedY">0</div>
+            <div class="cost satisfiedY">120</div>
+            <div class="weight satisfiedY">0.75 kg</div>
+            <div class="sum_cost satisfiedY">120</div>
+            <div class="sum_weight satisfiedY">0.75 kg</div>
+            <div class="ref satisfiedY">LT56</div>
+            
+            <div class="equipped satisfiedY"><i class="fas fa-check-circle"></i></div>
+            <div class="qty satisfiedY">1</div>
+            <div class="desc indent0 satisfiedY">Travel Gear
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="uses satisfiedY">0</div>
+            <div class="cost satisfiedY">0</div>
+            <div class="weight satisfiedY">0 kg</div>
+            <div class="sum_cost satisfiedY">405</div>
+            <div class="sum_weight satisfiedY">20.725 kg</div>
+            <div class="ref satisfiedY"></div>
+            
+            <div class="equipped satisfiedY"><i class="fas fa-check-circle"></i></div>
+            <div class="qty satisfiedY">1</div>
+            <div class="desc indent1 satisfiedY">Leather Pouch, 23 liter, 30 kg, Carry Strap
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY">DR 2</div>
+            </div>
+            <div class="uses satisfiedY">0</div>
+            <div class="cost satisfiedY">20</div>
+            <div class="weight satisfiedY">1.25 kg</div>
+            <div class="sum_cost satisfiedY">395</div>
+            <div class="sum_weight satisfiedY">13 kg</div>
+            <div class="ref satisfiedY">LT34</div>
+            
+            <div class="equipped satisfiedY"><i class="fas fa-check-circle"></i></div>
+            <div class="qty satisfiedY">2</div>
+            <div class="desc indent2 satisfiedY">Blanket
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="uses satisfiedY">0</div>
+            <div class="cost satisfiedY">20</div>
+            <div class="weight satisfiedY">2 kg</div>
+            <div class="sum_cost satisfiedY">40</div>
+            <div class="sum_weight satisfiedY">4 kg</div>
+            <div class="ref satisfiedY">B288</div>
+            
+            <div class="equipped satisfiedY"><i class="fas fa-check-circle"></i></div>
+            <div class="qty satisfiedY">1</div>
+            <div class="desc indent2 satisfiedY">Change of Clothes (No shoes, extra underwear)
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="uses satisfiedY">0</div>
+            <div class="cost satisfiedY">180</div>
+            <div class="weight satisfiedY">1 kg</div>
+            <div class="sum_cost satisfiedY">180</div>
+            <div class="sum_weight satisfiedY">1 kg</div>
+            <div class="ref satisfiedY"></div>
+            
+            <div class="equipped satisfiedY"><i class="fas fa-check-circle"></i></div>
+            <div class="qty satisfiedY">1</div>
+            <div class="desc indent2 satisfiedY">First Aid Kit
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="uses satisfiedY">0</div>
+            <div class="cost satisfiedY">50</div>
+            <div class="weight satisfiedY">1 kg</div>
+            <div class="sum_cost satisfiedY">50</div>
+            <div class="sum_weight satisfiedY">1 kg</div>
+            <div class="ref satisfiedY"></div>
+            
+            <div class="equipped satisfiedY"><i class="fas fa-check-circle"></i></div>
+            <div class="qty satisfiedY">1</div>
+            <div class="desc indent2 satisfiedY">Hatchet
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="uses satisfiedY">0</div>
+            <div class="cost satisfiedY">40</div>
+            <div class="weight satisfiedY">1 kg</div>
+            <div class="sum_cost satisfiedY">40</div>
+            <div class="sum_weight satisfiedY">1 kg</div>
+            <div class="ref satisfiedY">B271</div>
+            
+            <div class="equipped satisfiedY"><i class="fas fa-check-circle"></i></div>
+            <div class="qty satisfiedY">1</div>
+            <div class="desc indent2 satisfiedY">Personal Basics
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY">Minimum gear for camping: -2 to any Survival roll without it. Includes utensils, tinderbox or flint and steel, towel, etc., as TL permits.</div>
+            </div>
+            <div class="uses satisfiedY">0</div>
+            <div class="cost satisfiedY">5</div>
+            <div class="weight satisfiedY">0.5 kg</div>
+            <div class="sum_cost satisfiedY">5</div>
+            <div class="sum_weight satisfiedY">0.5 kg</div>
+            <div class="ref satisfiedY">B288</div>
+            
+            <div class="equipped satisfiedY"><i class="fas fa-check-circle"></i></div>
+            <div class="qty satisfiedY">1</div>
+            <div class="desc indent2 satisfiedY">Sewing Kit
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY">Includes simple Leatherworking, patching</div>
+            </div>
+            <div class="uses satisfiedY">0</div>
+            <div class="cost satisfiedY">30</div>
+            <div class="weight satisfiedY">0.5 kg</div>
+            <div class="sum_cost satisfiedY">30</div>
+            <div class="sum_weight satisfiedY">0.5 kg</div>
+            <div class="ref satisfiedY"></div>
+            
+            <div class="equipped satisfiedY"><i class="fas fa-check-circle"></i></div>
+            <div class="qty satisfiedY">15</div>
+            <div class="desc indent2 satisfiedY">Traveler's Rations
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY">One meal</div>
+            </div>
+            <div class="uses satisfiedY">0</div>
+            <div class="cost satisfiedY">2</div>
+            <div class="weight satisfiedY">0.25 kg</div>
+            <div class="sum_cost satisfiedY">30</div>
+            <div class="sum_weight satisfiedY">3.75 kg</div>
+            <div class="ref satisfiedY">B288</div>
+            
+            <div class="equipped satisfiedY"><i class="fas fa-check-circle"></i></div>
+            <div class="qty satisfiedY">1</div>
+            <div class="desc indent1 satisfiedY">Minell, Baby Girl
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="uses satisfiedY">0</div>
+            <div class="cost satisfiedY">0</div>
+            <div class="weight satisfiedY">3.8 kg</div>
+            <div class="sum_cost satisfiedY">0</div>
+            <div class="sum_weight satisfiedY">3.8 kg</div>
+            <div class="ref satisfiedY"></div>
+            
+            <div class="equipped satisfiedY"><i class="fas fa-check-circle"></i></div>
+            <div class="qty satisfiedY">1</div>
+            <div class="desc indent1 satisfiedY">Waterskin, 3.8 liter
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="uses satisfiedY">0</div>
+            <div class="cost satisfiedY">10</div>
+            <div class="weight satisfiedY">0.125 kg</div>
+            <div class="sum_cost satisfiedY">10</div>
+            <div class="sum_weight satisfiedY">3.925 kg</div>
+            <div class="ref satisfiedY">B288</div>
+            
+            <div class="equipped satisfiedY"><i class="fas fa-check-circle"></i></div>
+            <div class="qty satisfiedY">38</div>
+            <div class="desc indent2 satisfiedY">Water
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="uses satisfiedY">0</div>
+            <div class="cost satisfiedY">0</div>
+            <div class="weight satisfiedY">0.1 kg</div>
+            <div class="sum_cost satisfiedY">0</div>
+            <div class="sum_weight satisfiedY">3.8 kg</div>
+            <div class="ref satisfiedY"></div>
+            
+        </div>
+        <div id="other_equipment">
+            <div class="qty header"><i class="fab fa-slack-hash"></i></div>
+            <div class="desc header">Other Equipment ($265)</div>
+            <div class="uses header">Uses</div>
+            <div class="cost header">$</div>
+            <div class="weight header"><i class="fas fa-weight-hanging"></i></div>
+            <div class="sum_cost header">∑ $</div>
+            <div class="sum_weight header">∑ <i class="fas fa-weight-hanging"></i></div>
+            <div class="ref header"><i class="fas fa-bookmark"></i></div>
+            <div></div>
+
+            
+            <div class="qty satisfiedY">1</div>
+            <div class="desc indent0 satisfiedY">Cash
+                <div class="list_note satisfiedY"></div>
+                <div class="list_note satisfiedY"></div>
+            </div>
+            <div class="uses satisfiedY">0</div>
+            <div class="cost satisfiedY">265</div>
+            <div class="weight satisfiedY">0 kg</div>
+            <div class="sum_cost satisfiedY">265</div>
+            <div class="sum_weight satisfiedY">0 kg</div>
+            <div class="ref satisfiedY"></div>
+            <div></div>
+            
+        </div>
+        <div id="notes">
+            <div class="desc header">Notes</div>
+            <div class="ref header"><i class="fas fa-bookmark"></i></div>
+            <div></div>
+
+            
+            <div class="desc indent0"></div>
+            <div class="ref"></div>
+            <div></div>
+            
+            <div class="desc indent0">Bio</div>
+            <div class="ref"></div>
+            <div></div>
+            
+            <div class="desc indent1">From Blazing Bulwark, Lycocetum</div>
+            <div class="ref"></div>
+            <div></div>
+            
+            <div class="desc indent1">Left when she had her daughter, Minell</div>
+            <div class="ref"></div>
+            <div></div>
+            
+        </div>
+    </div>
+    <div id="footer">GCS is copyrighted ©1998-2021 by Richard A. Wilkes • All rights reserved •
+        <a href="https://gurpscharactersheet.com">gurpscharactersheet.com</a>
+    </div>
+</body>
+
+</html>
