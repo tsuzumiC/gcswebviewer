@@ -3,7 +3,7 @@
 This is a React powered GCS file viewer to allow people who have access to their .gcs file but not their computer.
 Select your character and it will sow up just like if you exported it to HTML from GCS.
 
-[GCS Sheet Web Viewer](tsuzumic.github.io/gcsreact/)
+[GCS Sheet Web Viewer](https://tsuzumic.github.io/gcsreact/)
 
 GCS is a sharacter sheet editor for the roleplaying system GURPS.
 
@@ -11,8 +11,8 @@ GCS is a sharacter sheet editor for the roleplaying system GURPS.
 
 ### GCS
 
-[GCS - Web](gurpscharactersheet.com)
-[GCS - Git](https://github.com/richardwilkes/gcs)
+[GCS - Web](https://gurpscharactersheet.com)
+[GCS - Git](https://https://github.com/richardwilkes/gcs)
 
 ### GURPS
 
