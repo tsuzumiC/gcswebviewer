@@ -12,6 +12,7 @@ GCS is a sharacter sheet editor for the roleplaying system GURPS.
 ### GCS
 
 [GCS - Web](https://gurpscharactersheet.com)
+
 [GCS - Git](https://https://github.com/richardwilkes/gcs)
 
 ### GURPS
