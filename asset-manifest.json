@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/gcsreact/static/css/main.c72210d2.chunk.css",
-    "main.js": "/gcsreact/static/js/main.a4cf5700.chunk.js",
-    "main.js.map": "/gcsreact/static/js/main.a4cf5700.chunk.js.map",
-    "runtime-main.js": "/gcsreact/static/js/runtime-main.6598ce9b.js",
-    "runtime-main.js.map": "/gcsreact/static/js/runtime-main.6598ce9b.js.map",
-    "static/js/2.8406dfea.chunk.js": "/gcsreact/static/js/2.8406dfea.chunk.js",
-    "static/js/2.8406dfea.chunk.js.map": "/gcsreact/static/js/2.8406dfea.chunk.js.map",
-    "index.html": "/gcsreact/index.html",
-    "static/css/main.c72210d2.chunk.css.map": "/gcsreact/static/css/main.c72210d2.chunk.css.map",
-    "static/js/2.8406dfea.chunk.js.LICENSE.txt": "/gcsreact/static/js/2.8406dfea.chunk.js.LICENSE.txt"
+    "main.css": "/gcswebviewer/static/css/main.c72210d2.chunk.css",
+    "main.js": "/gcswebviewer/static/js/main.1399a0ea.chunk.js",
+    "main.js.map": "/gcswebviewer/static/js/main.1399a0ea.chunk.js.map",
+    "runtime-main.js": "/gcswebviewer/static/js/runtime-main.6a1c9364.js",
+    "runtime-main.js.map": "/gcswebviewer/static/js/runtime-main.6a1c9364.js.map",
+    "static/js/2.8406dfea.chunk.js": "/gcswebviewer/static/js/2.8406dfea.chunk.js",
+    "static/js/2.8406dfea.chunk.js.map": "/gcswebviewer/static/js/2.8406dfea.chunk.js.map",
+    "index.html": "/gcswebviewer/index.html",
+    "static/css/main.c72210d2.chunk.css.map": "/gcswebviewer/static/css/main.c72210d2.chunk.css.map",
+    "static/js/2.8406dfea.chunk.js.LICENSE.txt": "/gcswebviewer/static/js/2.8406dfea.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.6598ce9b.js",
+    "static/js/runtime-main.6a1c9364.js",
     "static/js/2.8406dfea.chunk.js",
     "static/css/main.c72210d2.chunk.css",
-    "static/js/main.a4cf5700.chunk.js"
+    "static/js/main.1399a0ea.chunk.js"
   ]
 }
