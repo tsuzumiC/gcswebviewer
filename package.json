@@ -1,6 +1,6 @@
 {
-  "homepage": "http://tsuzumiC.github.io/gcsreact",
-  "name": "gcsreact",
+  "homepage": "http://tsuzumiC.github.io/gcswebviewer",
+  "name": "gcswebviewer",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

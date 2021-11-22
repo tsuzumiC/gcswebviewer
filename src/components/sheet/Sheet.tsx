@@ -48,7 +48,6 @@ const Sheet: React.FC<IProps> = (props) => {
       x.includes(" ") ? `'${x}'` : `'${x} ${x}'`
     ),
   ].join(" ");
-  console.log(gridTemplateAreas);
 
   return (
     <>
