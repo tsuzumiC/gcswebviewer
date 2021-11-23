@@ -1,6 +1,17 @@
 import React from "react";
-import { Attribute, EAttributeId } from "../../characterType";
-import { basicSwing, basicThrust, hpThresholds } from "./Utility";
+import {
+  TAttribute,
+  EAttributeId,
+  TEncumbrance,
+  THitLocation,
+} from "../../characterType";
+import {
+  basicSwing,
+  basicThrust,
+  encumbranceLoad,
+  fpThresholds,
+  hpThresholds,
+} from "./Utility";
 
 export const AttributeLabel: { [key: EAttributeId | string]: string } = {
   st: "Strength (ST)",
@@ -20,7 +31,7 @@ export const AttributeLabel: { [key: EAttributeId | string]: string } = {
   hp: "HP",
 };
 
-const makeAttribute = (data: Attribute) => {
+const makeAttribute = (data: TAttribute) => {
   return (
     <>
       <div className="points">{`[${data.calc.points}]`}</div>
@@ -30,7 +41,7 @@ const makeAttribute = (data: Attribute) => {
   );
 };
 
-const makeHPPool = (data: Attribute) => {
+const makeHPPool = (data: TAttribute) => {
   const { value, toolTip } = hpThresholds(
     data.calc.current ?? data.calc.value,
     data.calc.value
@@ -46,8 +57,52 @@ const makeHPPool = (data: Attribute) => {
   );
 };
 
+const makeFPPool = (data: TAttribute) => {
+  const { value, toolTip } = fpThresholds(
+    data.calc.current ?? data.calc.value,
+    data.calc.value
+  );
+  return (
+    <>
+      <div className="points">{`[${data.calc.points}]`}</div>
+      <div className="field">{data.calc.current}</div>
+      <div className="label">of</div>
+      <div className="field">{data.calc.value}</div>
+      <div className="label" title={toolTip}>{`[${value}]`}</div>
+    </>
+  );
+};
+
+const makeLocations = (data: THitLocation) => {
+  return (
+    <>
+      <div className="roll">{data.calc.roll_range}</div>
+      <div className="where">{data.table_name}</div>
+      <div className="penalty">{data.hit_penalty}</div>
+      <div className="dr">{data.calc.dr}</div>
+    </>
+  );
+};
+
+const makeEncumbrance = (data: TEncumbrance) => {
+  const load = Math.round(data.bl * encumbranceLoad[data.level]);
+  const move = Math.round(data.bm * (1 - 0.2 * data.level));
+  const dodge = data.dodge - data.level;
+  return (
+    <>
+      <div className={`encmarker${data.current ? " current" : ""}`}></div>
+      <div
+        className={`enc${data.current ? " current" : ""} enc${data.level}`}
+      ></div>
+      <div className={`load${data.current ? " current" : ""}`}>{load}</div>
+      <div className={`move${data.current ? " current" : ""}`}>{move}</div>
+      <div className={`dodge${data.current ? " current" : ""}`}>{dodge}</div>
+    </>
+  );
+};
+
 interface IAttributesProps {
-  attributes: Attribute[];
+  attributes: TAttribute[];
 }
 
 export const Attributes: React.FC<IAttributesProps> = (props) => {
@@ -55,7 +110,7 @@ export const Attributes: React.FC<IAttributesProps> = (props) => {
 
   const attributes = attr_list.reduce((prev, curr) => {
     return { ...prev, [curr.attr_id]: curr };
-  }, {} as { [key in EAttributeId]: Attribute });
+  }, {} as { [key in EAttributeId]: TAttribute });
 
   return (
     <div id="attr-col">
@@ -97,13 +152,21 @@ export const Attributes: React.FC<IAttributesProps> = (props) => {
       </div>
       <div id="pools">
         <div className="header">Point Pools</div>
-        <div className="fieldblock5">{makeHPPool(attributes.hp)}</div>
+        <div className="fieldblock5">
+          {makeHPPool(attributes.hp)}
+          {makeFPPool(attributes.fp)}
+        </div>
       </div>
     </div>
   );
 };
 
-export const Location: React.FC = (props) => {
+interface ILocationProps {
+  locations: THitLocation[];
+}
+
+export const Location: React.FC<ILocationProps> = (props) => {
+  const { locations } = props;
   return (
     <div id="location">
       <div className="header">Hit Location</div>
@@ -111,17 +174,23 @@ export const Location: React.FC = (props) => {
       <div className="where header">Where</div>
       <div className="penalty header">Penalty</div>
       <div className="dr header">DR</div>
-      @LOOP_START
-      <div className="roll">@ROLL</div>
-      <div className="where">@WHERE</div>
-      <div className="penalty">@PENALTY</div>
-      <div className="dr">@DR</div>
-      @LOOP_END
+      {locations.map((x) => makeLocations(x))}
     </div>
   );
 };
 
-export const Encumbrance: React.FC = (props) => {
+export const Encumbrance: React.FC<IAttributesProps> = (props) => {
+  const { attributes: attr_list } = props;
+
+  const attributes = attr_list.reduce((prev, curr) => {
+    return { ...prev, [curr.attr_id]: curr };
+  }, {} as { [key in EAttributeId]: TAttribute });
+  const bl = Math.round(
+    (attributes.st.calc.value * attributes.st.calc.value) / 5
+  );
+  const bm = attributes.basic_move.calc.value;
+  const dodge = attributes.basic_speed.calc.value + 3;
+
   return (
     <div id="enc-col">
       <div id="encumbrance">
@@ -131,29 +200,27 @@ export const Encumbrance: React.FC = (props) => {
         <div className="loadh header">Max Load</div>
         <div className="moveh header">Move</div>
         <div className="dodgeh header">Dodge</div>
-        @LOOP_START
-        <div className="encmarker @CURRENT_MARKER"></div>
-        <div className="enc @CURRENT_MARKER enc@LEVEL_ONLY"></div>
-        <div className="load @CURRENT_MARKER">@MAX_LOAD</div>
-        <div className="move @CURRENT_MARKER">@MOVE</div>
-        <div className="dodge @CURRENT_MARKER">@DODGE</div>
-        @LOOP_END
+        {makeEncumbrance({ level: 0, bl, bm, dodge })}
+        {makeEncumbrance({ level: 1, bl, bm, dodge })}
+        {makeEncumbrance({ level: 2, bl, bm, dodge })}
+        {makeEncumbrance({ level: 3, bl, bm, dodge })}
+        {makeEncumbrance({ level: 4, bl, bm, dodge })}
       </div>
       <div id="lifting">
         <div className="header">Lifting &amp; Moving Things</div>
-        <div className="lift">@BASIC_LIFT</div>
+        <div className="lift">{bl}</div>
         <div className="liftdesc">Basic Lift</div>
-        <div className="lift">@ONE_HANDED_LIFT</div>
+        <div className="lift">{bl * 2}</div>
         <div className="liftdesc">One-Handed Lift</div>
-        <div className="lift">@TWO_HANDED_LIFT</div>
+        <div className="lift">{bl * 8}</div>
         <div className="liftdesc">Two-Handed Lift</div>
-        <div className="lift">@SHOVE</div>
+        <div className="lift">{bl * 12}</div>
         <div className="liftdesc">Shove &amp; Knock Over</div>
-        <div className="lift">@RUNNING_SHOVE</div>
+        <div className="lift">{bl * 24}</div>
         <div className="liftdesc">Running Shove &amp; Knock Over</div>
-        <div className="lift">@CARRY_ON_BACK</div>
+        <div className="lift">{bl * 15}</div>
         <div className="liftdesc">Carry on Back</div>
-        <div className="lift">@SHIFT_SLIGHTLY</div>
+        <div className="lift">{bl * 50}</div>
         <div className="liftdesc">Shift Slightly</div>
       </div>
     </div>

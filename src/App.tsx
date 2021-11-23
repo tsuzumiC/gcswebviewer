@@ -4,17 +4,21 @@ import React, { useState } from "react";
 
 import Sheet from "./components/sheet/Sheet";
 
-import { Character, EAttributeId, Attribute } from "./components/characterType";
+import {
+  TCharacter,
+  EAttributeId,
+  TAttribute,
+} from "./components/characterType";
 
-interface IImportAttributes extends Omit<Attribute, "attr_id"> {
+interface IImportAttributes extends Omit<TAttribute, "attr_id"> {
   attr_id: string;
 }
-interface IImportType extends Omit<Character, "attributes"> {
+interface IImportType extends Omit<TCharacter, "attributes"> {
   attributes: IImportAttributes[];
 }
 
 const App: React.FC = (props) => {
-  const [character, setCharacter] = useState<Character>();
+  const [character, setCharacter] = useState<TCharacter>();
 
   const handleSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -30,7 +34,7 @@ const App: React.FC = (props) => {
           })),
         };
       }
-      setCharacter(data as Character);
+      setCharacter(data as TCharacter);
     }
   };
 

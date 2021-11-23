@@ -83,3 +83,36 @@ export const hpThresholds = (
   }
   return { value: "Healthy" };
 };
+
+export const fpThresholds = (
+  curr: number,
+  max: number
+): { value: string; toolTip?: string } => {
+  if (curr <= max * -1) {
+    return {
+      value: "Unconscious",
+    };
+  }
+  if (curr <= 0) {
+    return {
+      value: "Collapse",
+      toolTip:
+        "Roll vs. Will to do anything besides talk or rest; failure causes unconsciousness\nEach FP you lose below 0 also causes 1 HP of injury\nMove, Dodge and ST are halved (B426)",
+    };
+  }
+  if (curr <= Math.round(max / 3)) {
+    return { value: "Tired", toolTip: "Move and Dodge are halved (B419)" };
+  }
+  if (curr < max) {
+    return { value: "Tiring" };
+  }
+  return { value: "Rested" };
+};
+
+export const encumbranceLoad: { [key: number]: number } = {
+  0: 1,
+  1: 2,
+  2: 3,
+  3: 6,
+  4: 10,
+};

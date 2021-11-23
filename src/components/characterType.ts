@@ -1,4 +1,4 @@
-export type AttributeDef = {
+export type TAttributeDef = {
   id: string;
   type: string;
   name: string;
@@ -16,7 +16,7 @@ export type AttributeDef = {
   }[];
 };
 
-export type Attribute = {
+export type TAttribute = {
   attr_id: EAttributeId;
   adj: number;
   calc: {
@@ -44,7 +44,7 @@ export enum EAttributeId {
   hp = "hp",
 }
 
-export type HitLocation = {
+export type THitLocation = {
   id: string;
   choice_name: string;
   table_name: string;
@@ -58,7 +58,15 @@ export type HitLocation = {
   };
 };
 
-export type Advantage = {
+export type TEncumbrance = {
+  level: number;
+  bl: number;
+  bm: number;
+  dodge: number;
+  current?: boolean;
+};
+
+export type TAdvantage = {
   type: string;
   id: string;
   name: string;
@@ -89,21 +97,10 @@ export type Advantage = {
       block?: string;
       damage?: string;
     };
-    defaults: SkillDefault[];
+    defaults: TSkillDefault[];
   }[];
-  modifiers?: {
-    type: string;
-    id: string;
-    name: string;
-    disabled?: boolean;
-    reference?: string;
-    cost_type: string;
-    cost: number;
-    affects?: string;
-    notes?: string;
-    features?: Feature[];
-  }[];
-  children?: Advantage[];
+  modifiers?: TModifier[];
+  children?: TAdvantage[];
 
   reference?: string;
   calc: {
@@ -112,7 +109,20 @@ export type Advantage = {
   categories?: string[];
 };
 
-export type Skill = {
+export type TModifier = {
+  type: string;
+  id: string;
+  name: string;
+  disabled?: boolean;
+  reference?: string;
+  cost_type: string;
+  cost: number;
+  affects?: string;
+  notes?: string;
+  features?: TFeature[];
+};
+
+export type TSkill = {
   type: string;
   id: string;
   name: string;
@@ -121,21 +131,21 @@ export type Skill = {
   tech_level?: string;
   difficulty?: string;
   points: number;
-  defaulted_from?: SkillDefault;
+  defaulted_from?: TSkillDefault;
   calc: {
     level: number;
     rsl: string;
   };
-  prereqs?: PreReq;
-  defaults?: SkillDefault[];
+  prereqs?: TPreReq;
+  defaults?: TSkillDefault[];
   notes?: string;
-  features?: Feature[];
+  features?: TFeature[];
   limit?: number;
-  default?: SkillDefault;
+  default?: TSkillDefault;
   categories?: string[];
 };
 
-export type Equipment = {
+export type TEquipment = {
   type: string;
   id: string;
   equipped?: boolean;
@@ -145,11 +155,11 @@ export type Equipment = {
   value?: string;
   weight?: string;
   reference?: string;
-  features?: Feature[];
+  features?: TFeature[];
   categories?: string[];
 };
 
-export type SkillDefault = {
+export type TSkillDefault = {
   type: string;
   name?: string;
   specialization?: string;
@@ -159,37 +169,37 @@ export type SkillDefault = {
   points?: number;
 };
 
-export type Feature = {
+export type TFeature = {
   type: string;
   amount: number;
   per_level?: boolean;
   situation?: string;
   selection_type?: string;
-  name?: Compare;
-  level?: Compare;
+  name?: TCompare;
+  level?: TCompare;
   attribute?: string;
   location?: string;
 };
 
-export type Compare = { compare?: string; qualifier?: number | string };
+export type TCompare = { compare?: string; qualifier?: number | string };
 
-export type PreReq = {
+export type TPreReq = {
   type: string;
   all?: boolean;
   has?: boolean;
-  name?: Compare;
-  when_tl?: Compare;
-  notes?: Compare;
-  prereqs?: PreReq[];
+  name?: TCompare;
+  when_tl?: TCompare;
+  notes?: TCompare;
+  prereqs?: TPreReq[];
 };
 
-export type DisplayOptions =
+export type TDisplayOptions =
   | "not_shown"
   | "tooltip"
   | "inline"
   | "inline_and_tooltip";
 
-export type Character = {
+export type TCharacter = {
   type: string;
   version: number;
   id: string;
@@ -219,13 +229,13 @@ export type Character = {
       orientation: string;
     };
     block_layout: string[];
-    attributes: AttributeDef[];
+    attributes: TAttributeDef[];
 
     hit_locations: {
       id: string;
       name: string;
       roll: string;
-      locations: HitLocation[];
+      locations: THitLocation[];
     };
   };
   created_date: string;
@@ -249,11 +259,11 @@ export type Character = {
     religion?: string;
     size?: string;
   };
-  attributes: Attribute[];
+  attributes: TAttribute[];
   total_points: number;
-  advantages: Advantage[];
+  advantages: TAdvantage[];
 
-  skills: Skill[];
+  skills: TSkill[];
 
-  equipment: Equipment[];
+  equipment: TEquipment[];
 };

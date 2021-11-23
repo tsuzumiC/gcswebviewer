@@ -1,7 +1,7 @@
 import "./Sheet.scss";
 
 import React from "react";
-import { Character } from "../characterType";
+import { TCharacter } from "../characterType";
 import {
   Description,
   Identity,
@@ -11,7 +11,7 @@ import {
 } from "./components/Personal";
 
 import { Advantages } from "./components/Advantages";
-import { Attributes, Encumbrance, Location } from "./components/Stats";
+import { Attributes, Location, Encumbrance } from "./components/Stats";
 import { CondModifiers } from "./components/CondModifiers";
 import { Equipment, OtherEquipment } from "./components/Equimpment";
 import { Melee, Ranged } from "./components/Combat";
@@ -29,22 +29,22 @@ type TShowField = {
 };
 
 interface IProps {
-  character: Character;
+  character: TCharacter;
 }
 
 const Sheet: React.FC<IProps> = (props) => {
   const { character } = props;
-  const { profile } = character;
+  const { profile, settings } = character;
 
   const templateAreas = ["'personal personal'", "'stats stats'"];
-  character.settings.block_layout.forEach((x) => {
+  settings.block_layout.forEach((x) => {
     templateAreas.push(`'${x}'`);
   });
 
   const gridTemplateAreas = [
     "'personal personal'",
     "'stats stats'",
-    ...character.settings.block_layout.map((x) =>
+    ...settings.block_layout.map((x) =>
       x.includes(" ") ? `'${x}'` : `'${x} ${x}'`
     ),
   ].join(" ");
@@ -88,8 +88,8 @@ const Sheet: React.FC<IProps> = (props) => {
 
         <div id="stats">
           <Attributes attributes={character.attributes} />
-          <Location />
-          <Encumbrance />
+          <Location locations={settings.hit_locations.locations} />
+          <Encumbrance attributes={character.attributes} />
         </div>
 
         <Reactions />
@@ -98,7 +98,7 @@ const Sheet: React.FC<IProps> = (props) => {
 
         <Melee />
         <Ranged />
-        <Advantages />
+        <Advantages advantages={character.advantages} />
         <Skills />
         {/* <Spells /> */}
         <Equipment />
