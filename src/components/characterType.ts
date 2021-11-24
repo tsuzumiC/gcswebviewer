@@ -80,31 +80,13 @@ export type TAdvantage = {
   base_points?: number;
   levels?: string;
   points_per_level?: number;
-  weapons?: {
-    type: string;
-    damage?: {
-      type?: string;
-      st?: string;
-      base?: string;
-    };
-    usage?: string;
-    reach?: string;
-    parry?: string;
-    block?: string;
-    calc?: {
-      level?: number;
-      parry?: string;
-      block?: string;
-      damage?: string;
-    };
-    defaults: TSkillDefault[];
-  }[];
+  weapons?: TWeapon[];
   modifiers?: TModifier[];
   children?: TAdvantage[];
 
   reference?: string;
-  calc: {
-    points: number;
+  calc?: {
+    points?: number;
   };
   categories?: string[];
 };
@@ -122,6 +104,31 @@ export type TModifier = {
   features?: TFeature[];
 };
 
+export type TWeapon = {
+  type: string;
+  damage?: {
+    type?: string;
+    st?: string;
+    base?: string;
+  };
+  usage?: string;
+  reach?: string;
+  parry?: string;
+  block?: string;
+  calc?: {
+    level?: number;
+    parry?: string;
+    block?: string;
+    damage?: string;
+  };
+  defaults?: TSkillDefault[];
+};
+
+export type TReaction = {
+  modifier?: string;
+  reaction?: string;
+};
+
 export type TSkill = {
   type: string;
   id: string;
@@ -130,11 +137,11 @@ export type TSkill = {
   specialization?: string;
   tech_level?: string;
   difficulty?: string;
-  points: number;
+  points?: number;
   defaulted_from?: TSkillDefault;
-  calc: {
-    level: number;
-    rsl: string;
+  calc?: {
+    level?: number;
+    rsl?: string;
   };
   prereqs?: TPreReq;
   defaults?: TSkillDefault[];
@@ -143,6 +150,7 @@ export type TSkill = {
   limit?: number;
   default?: TSkillDefault;
   categories?: string[];
+  children?: TSkill[];
 };
 
 export type TEquipment = {

@@ -99,7 +99,7 @@ const Sheet: React.FC<IProps> = (props) => {
         <Melee />
         <Ranged />
         <Advantages advantages={character.advantages} />
-        <Skills />
+        <Skills skills={character.skills} />
         {/* <Spells /> */}
         <Equipment />
         <OtherEquipment />

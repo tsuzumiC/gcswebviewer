@@ -29,7 +29,7 @@ const makeAdvantage = (data: TAdvantage, indent = 0): JSX.Element => {
         </div>
         <div className="list_note satisfied@SATISFIED">{data.userdesc}</div>
       </div>
-      <div className="pts satisfied@SATISFIED">{data.calc.points}</div>
+      <div className="pts satisfied@SATISFIED">{data.calc?.points}</div>
       <div className="ref satisfied@SATISFIED">{data.reference}</div>
       {data.children?.map((x) => makeAdvantage(x, indent + 1))}
     </>
@@ -46,7 +46,7 @@ const makeModifier = (data: TModifier) => {
 };
 
 interface IAdvantagesProps {
-  advantages: TAdvantage[];
+  advantages?: TAdvantage[];
 }
 
 export const Advantages: React.FC<IAdvantagesProps> = (props) => {
@@ -60,7 +60,7 @@ export const Advantages: React.FC<IAdvantagesProps> = (props) => {
       <div className="ref header">
         <i className="fas fa-bookmark"></i>
       </div>
-      {advantages.map((x) => makeAdvantage(x))}
+      {advantages?.map((x) => makeAdvantage(x))}
     </div>
   );
 };
